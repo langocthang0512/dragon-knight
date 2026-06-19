@@ -2,11 +2,15 @@ import Phaser from 'phaser';
 import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../config/gameSettings';
 import { responsiveScaleConfig } from '../core/ResponsiveScaling';
 import { BootScene } from './scenes/BootScene';
+import { CharacterSelectScene } from './scenes/CharacterSelectScene';
+import { GameOverScene } from './scenes/GameOverScene';
 import { GameScene } from './scenes/GameScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
 import { PauseScene } from './scenes/PauseScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { ResultScene } from './scenes/ResultScene';
+import { SettingsScene } from './scenes/SettingsScene';
+import { ShopScene } from './scenes/ShopScene';
 
 export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameConfig {
   return {
@@ -25,6 +29,17 @@ export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameCon
         debug: false,
       },
     },
-    scene: [BootScene, PreloadScene, MainMenuScene, GameScene, PauseScene, ResultScene],
+    scene: [
+      BootScene,
+      PreloadScene,
+      MainMenuScene,
+      CharacterSelectScene,
+      ShopScene,
+      SettingsScene,
+      GameScene,
+      PauseScene,
+      GameOverScene,
+      ResultScene,
+    ],
   };
 }

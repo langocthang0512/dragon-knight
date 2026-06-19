@@ -8,7 +8,7 @@ export class Hud {
 
   create() {
     this.healthLabel = this.scene.add
-      .text(8, 20, 'HP 3', {
+      .text(8, 20, 'HEARTS 3/3', {
         fontFamily: 'monospace',
         fontSize: '10px',
         color: '#f8fafc',
@@ -17,10 +17,19 @@ export class Hud {
       .setDepth(900);
 
     this.coinsLabel = this.scene.add
-      .text(420, 20, 'COIN 0', {
+      .text(372, 20, 'COIN 0', {
         fontFamily: 'monospace',
         fontSize: '10px',
         color: '#fde68a',
+      })
+      .setScrollFactor(0)
+      .setDepth(900);
+
+    this.scene.add
+      .text(198, 20, 'ESC PAUSE', {
+        fontFamily: 'monospace',
+        fontSize: '9px',
+        color: '#94a3b8',
       })
       .setScrollFactor(0)
       .setDepth(900);
@@ -31,6 +40,6 @@ export class Hud {
   }
 
   setHealth(health: number, maxHealth: number) {
-    this.healthLabel?.setText(`HP ${health}/${maxHealth}`);
+    this.healthLabel?.setText(`HEARTS ${health}/${maxHealth}`);
   }
 }

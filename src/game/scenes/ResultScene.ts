@@ -23,7 +23,7 @@ export class ResultScene extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor('#111827');
     this.add
-      .text(centerX(), centerY() - 52, 'LEVEL 1 COMPLETE', {
+      .text(centerX(), centerY() - 52, 'VICTORY', {
         fontFamily: 'monospace',
         fontSize: '20px',
         color: '#f8fafc',
@@ -51,7 +51,7 @@ export class ResultScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.add
-      .text(centerX(), centerY() + 66, 'ENTER return to menu', {
+      .text(centerX(), centerY() + 66, 'ENTER menu | R replay', {
         fontFamily: 'monospace',
         fontSize: '10px',
         color: '#94a3b8',
@@ -59,5 +59,6 @@ export class ResultScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.input.keyboard?.once('keydown-ENTER', () => sceneManager.start(SceneKeys.MainMenu));
+    this.input.keyboard?.once('keydown-R', () => sceneManager.start(SceneKeys.Game));
   }
 }

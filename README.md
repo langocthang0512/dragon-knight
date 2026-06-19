@@ -47,7 +47,13 @@ Levels 2 and 3 are explicitly out of scope until requested later.
 npm install
 npm run dev
 npm run build
+npm run preview
 ```
+
+## Release Docs
+
+- Deployment notes: `DEPLOY.md`
+- QA checklist: `TEST_CASES.md`
 
 ## Repository Rules
 

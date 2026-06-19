@@ -81,6 +81,7 @@ export class GameScene extends Phaser.Scene {
     const save = SaveService.load();
     this.player = new Player(this, levelOne.playerSpawn.x, levelOne.playerSpawn.y, {
       variant: save.selectedKnight,
+      maxHealth: save.maxHealth,
     });
     this.physics.add.collider(this.player, platforms);
     this.physics.add.overlap(this.player, traps, () => {
@@ -156,11 +157,16 @@ export class GameScene extends Phaser.Scene {
     this.hud.setCoins(this.coinsCollected);
     this.hud.setHealth(this.player.getHealthSnapshot().health, this.player.getHealthSnapshot().maxHealth);
 
-    this.debug = new DebugSystem(this);
-    this.debug.create('debug: Level 1 / tutorial');
+    if (save.settings.showDebug) {
+      this.debug = new DebugSystem(this);
+      this.debug.create('debug: Level 1 / tutorial');
+    }
 
     this.events.on(PlayerEvents.HealthChanged, ({ health, maxHealth }: PlayerHealthChangedEvent) => {
       this.hud?.setHealth(health, maxHealth);
+      if (health <= 0 && !this.levelComplete) {
+        this.sceneManager?.start(SceneKeys.GameOver);
+      }
     });
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);

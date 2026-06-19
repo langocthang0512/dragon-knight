@@ -41,6 +41,9 @@ Do not build Levels 2 or 3 yet.
 - A3 Level 1 playable build is in place with empty background, ground, ledges, platforms, coins, bonfire checkpoint, spike traps, falling dragon eggs, small dragons, flying dragons, tutorial flow, and finish gate.
 - Level 1 completion saves collected coins and `levelOneBestTimeMs`, then routes to `ResultScene`.
 - Complete-run QA passed through headless Chrome/CDP: finished Level 1 with 28 coins and saved `levelOneBestTimeMs: 67178`.
+- A4 release UI is in place with Main Menu, Shop, Character Select, Settings, Game Over, Victory, hearts HUD, deployment notes, and QA checklist.
+- A4 QA passed with `npm run build`, local dev-server smoke test, and static preview check.
+- GitHub/Vercel deployment is prepared but not executed from this environment because no Git remote is configured and neither `gh` nor `vercel` is installed on PATH.
 - Dev server verification passes with `npm run dev` on a temporary local port.
 - Production build passes with `npm run build`.
 - Dependency audit passed at A0 with `npm audit --audit-level=low`.

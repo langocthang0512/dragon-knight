@@ -20,7 +20,7 @@ export class PauseScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.add
-      .text(centerX(), centerY() + 18, 'ESC resume | M menu', {
+      .text(centerX(), centerY() + 18, 'ESC resume | R retry | M menu', {
         fontFamily: 'monospace',
         fontSize: '10px',
         color: '#cbd5e1',
@@ -30,6 +30,11 @@ export class PauseScene extends Phaser.Scene {
     this.input.keyboard?.once('keydown-ESC', () => {
       this.scene.resume(SceneKeys.Game);
       sceneManager.stop(SceneKeys.Pause);
+    });
+
+    this.input.keyboard?.once('keydown-R', () => {
+      sceneManager.stop(SceneKeys.Pause);
+      sceneManager.start(SceneKeys.Game);
     });
 
     this.input.keyboard?.once('keydown-M', () => {
