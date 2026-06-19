@@ -4,7 +4,9 @@ export type PlayerInputSnapshot = {
   left: boolean;
   right: boolean;
   jump: boolean;
+  jumpPressed: boolean;
   attack: boolean;
+  attackPressed: boolean;
   pause: boolean;
 };
 
@@ -32,12 +34,22 @@ export class InputSystem {
 
   snapshot(): PlayerInputSnapshot {
     const pauseKey = this.keys?.esc;
+    const upKey = this.cursors?.up;
+    const wKey = this.keys?.w;
+    const spaceKey = this.keys?.space;
+    const attackKey = this.keys?.j;
 
     return {
       left: Boolean(this.cursors?.left.isDown || this.keys?.a.isDown),
       right: Boolean(this.cursors?.right.isDown || this.keys?.d.isDown),
       jump: Boolean(this.cursors?.up.isDown || this.keys?.w.isDown || this.keys?.space.isDown),
-      attack: Boolean(this.keys?.j.isDown),
+      jumpPressed: Boolean(
+        (upKey && Phaser.Input.Keyboard.JustDown(upKey)) ||
+          (wKey && Phaser.Input.Keyboard.JustDown(wKey)) ||
+          (spaceKey && Phaser.Input.Keyboard.JustDown(spaceKey)),
+      ),
+      attack: Boolean(attackKey?.isDown),
+      attackPressed: attackKey ? Phaser.Input.Keyboard.JustDown(attackKey) : false,
       pause: pauseKey ? Phaser.Input.Keyboard.JustDown(pauseKey) : false,
     };
   }

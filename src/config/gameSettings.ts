@@ -7,4 +7,8 @@ export const gameSettings = {
   storageKey: 'dragon-knight-save',
   backgroundColor: '#101827',
   worldGravity: 900,
+  defaultHealth: 3,
+  maxHealth: 5,
+  coyoteTimeMs: 110,
+  jumpBufferMs: 130,
 } as const;

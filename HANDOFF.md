@@ -35,6 +35,9 @@ Do not build Levels 2 or 3 yet.
 - `BootScene` starts `PreloadScene`; `PreloadScene` creates generated placeholder textures; `MainMenuScene` starts the Level 1 placeholder with Enter.
 - Foundation systems exist for input, scene management, save data, generated asset loading, responsive scaling, and debug overlays.
 - Placeholder gameplay includes a controllable player, one enemy spawn, simple platforms, HUD text, and a pause overlay.
+- A2 player foundation is in place with generated original placeholder sprites for male and female variants; the armor/body is shared and hair changes by variant.
+- Player gameplay includes run, jump, double jump, sword attack, coyote time, jump buffering, default 3 HP, maximum 5 HP support, enemy/trap damage for 1 HP, bonfire checkpoint, trap checkpoint respawn, and death checkpoint respawn.
+- Player animation states are wired for idle, run, jump, fall, attack, hit, and death using generated Phaser animation frames.
 - Dev server verification passes with `npm run dev` on a temporary local port.
 - Production build passes with `npm run build`.
 - Dependency audit passed at A0 with `npm audit --audit-level=low`.
@@ -49,6 +52,7 @@ Implement the real vertical-slice menu and progression flow:
 - Main Menu options
 - HUD state model
 - Level 1 gameplay loop and win condition
+- Replace generated placeholder visuals with production-safe original pixel art when an asset pipeline milestone is requested.
 
 ## Standing Rules
 

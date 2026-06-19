@@ -29,4 +29,8 @@ export class Hud {
   setCoins(coins: number) {
     this.coinsLabel?.setText(`COIN ${coins}`);
   }
+
+  setHealth(health: number, maxHealth: number) {
+    this.healthLabel?.setText(`HP ${health}/${maxHealth}`);
+  }
 }

@@ -26,6 +26,14 @@ Levels 2 and 3 are explicitly out of scope until requested later.
 - `src/config` and `src/data` contain durable configuration and game data.
 - `src/assets`, `src/audio`, and `src/effects` are reserved for production content.
 
+## Current Gameplay Foundation
+
+- Male and female player variants use the same armor/body with variant-specific hair.
+- Player supports run, jump, double jump, sword attack, coyote time, and jump buffering.
+- Health starts at 3 HP and is capped at 5 HP.
+- Bonfire checkpoint respawn is wired for trap recovery and death recovery.
+- Idle, run, jump, fall, attack, hit, and death states are represented with generated placeholder animations.
+
 ## Commands
 
 ```bash

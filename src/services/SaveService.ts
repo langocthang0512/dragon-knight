@@ -1,23 +1,27 @@
 import { gameSettings } from '../config/gameSettings';
+import { PlayerVariant } from '../entities/player/playerTypes';
 
 export type SaveData = {
-  selectedKnight: string;
+  selectedKnight: PlayerVariant;
   coins: number;
-  unlockedKnights: string[];
+  unlockedKnights: PlayerVariant[];
   levelOneBestTimeMs?: number;
 };
 
 const defaultSaveData: SaveData = {
-  selectedKnight: 'ember',
+  selectedKnight: 'male',
   coins: 0,
-  unlockedKnights: ['ember'],
+  unlockedKnights: ['male', 'female'],
 };
 
 export class SaveService {
   static load(): SaveData {
     try {
       const raw = window.localStorage.getItem(gameSettings.storageKey);
-      return raw ? { ...defaultSaveData, ...JSON.parse(raw) } : { ...defaultSaveData };
+      const saveData = raw ? { ...defaultSaveData, ...JSON.parse(raw) } : { ...defaultSaveData };
+      return saveData.selectedKnight === 'female'
+        ? { ...saveData, selectedKnight: 'female' }
+        : { ...saveData, selectedKnight: 'male' };
     } catch {
       return { ...defaultSaveData };
     }
