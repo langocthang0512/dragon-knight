@@ -44,7 +44,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.setCollideWorldBounds(true);
+    this.setCollideWorldBounds(false);
     this.setOrigin(0.5, 1);
     this.setDepth(20);
 
@@ -63,6 +63,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   updateFromInput(input: PlayerInputSnapshot) {
     const now = this.scene.time.now;
     const body = this.body as Phaser.Physics.Arcade.Body;
+
+    if (this.y > this.scene.physics.world.bounds.height + 48 && !this.respawning) {
+      this.takeDamage(1, 'trap');
+    }
+
+    if (this.x < 8) {
+      this.setX(8);
+    }
 
     this.updateGrounding(now, body);
     this.updateAttackHitbox(body);

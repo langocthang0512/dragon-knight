@@ -34,6 +34,13 @@ Levels 2 and 3 are explicitly out of scope until requested later.
 - Bonfire checkpoint respawn is wired for trap recovery and death recovery.
 - Idle, run, jump, fall, attack, hit, and death states are represented with generated placeholder animations.
 
+## Level 1
+
+- Empty background with a horizontal platforming course.
+- Includes ground, ledges, platforms, coins, checkpoint, spike traps, falling dragon eggs, small dragons, flying dragons, and finish gate.
+- Flow covers movement, coin collection, combat, checkpoint, trap recovery, egg hazards, and completion.
+- Completion saves coins and best time, then shows the result screen.
+
 ## Commands
 
 ```bash

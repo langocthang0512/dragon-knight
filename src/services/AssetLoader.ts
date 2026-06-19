@@ -4,10 +4,14 @@ import { PlayerAnimationState, PlayerVariant } from '../entities/player/playerTy
 export const PlaceholderAssets = {
   player: 'placeholder-player',
   enemy: 'placeholder-enemy',
+  dragonSmall: 'placeholder-dragon-small',
+  dragonFlying: 'placeholder-dragon-flying',
+  dragonEgg: 'placeholder-dragon-egg',
   coin: 'placeholder-coin',
   tile: 'placeholder-tile',
   trap: 'placeholder-trap',
   bonfire: 'placeholder-bonfire',
+  finishGate: 'placeholder-finish-gate',
 } as const;
 
 const playerStates: PlayerAnimationState[] = ['idle', 'run', 'jump', 'fall', 'attack', 'hit', 'death'];
@@ -32,10 +36,14 @@ export class AssetLoader {
     this.createPlayerTextures('male');
     this.createPlayerTextures('female');
     this.createTexture(PlaceholderAssets.enemy, 16, 16, 0x8b5cf6);
-    this.createTexture(PlaceholderAssets.coin, 8, 8, 0xfacc15);
     this.createTexture(PlaceholderAssets.tile, 16, 16, 0x475569);
+    this.createCoinTexture();
+    this.createDragonTexture(PlaceholderAssets.dragonSmall, 26, 18, 0x16a34a, false);
+    this.createDragonTexture(PlaceholderAssets.dragonFlying, 28, 18, 0x7c3aed, true);
+    this.createDragonEggTexture();
     this.createTrapTexture();
     this.createBonfireTexture();
+    this.createFinishGateTexture();
     this.createPlayerAnimations();
   }
 
@@ -232,6 +240,75 @@ export class AssetLoader {
     graphics.destroy();
   }
 
+  private createCoinTexture() {
+    if (this.scene.textures.exists(PlaceholderAssets.coin)) {
+      return;
+    }
+
+    const graphics = this.scene.make.graphics({ x: 0, y: 0 }, false);
+    graphics.fillStyle(0xfacc15, 1);
+    graphics.fillRect(2, 0, 6, 2);
+    graphics.fillRect(1, 2, 8, 6);
+    graphics.fillRect(2, 8, 6, 2);
+    graphics.fillStyle(0xfef3c7, 1);
+    graphics.fillRect(4, 2, 2, 6);
+    graphics.generateTexture(PlaceholderAssets.coin, 10, 10);
+    graphics.destroy();
+  }
+
+  private createDragonTexture(key: string, width: number, height: number, color: number, flying: boolean) {
+    if (this.scene.textures.exists(key)) {
+      return;
+    }
+
+    const graphics = this.scene.make.graphics({ x: 0, y: 0 }, false);
+    const belly = flying ? 0xf0abfc : 0xfef3c7;
+
+    graphics.fillStyle(color, 1);
+    graphics.fillRect(5, 7, 14, 8);
+    graphics.fillRect(16, 4, 8, 7);
+    graphics.fillRect(2, 10, 5, 4);
+    graphics.fillRect(7, 14, 3, 4);
+    graphics.fillRect(16, 14, 3, 4);
+    graphics.fillStyle(belly, 1);
+    graphics.fillRect(11, 10, 6, 4);
+    graphics.fillStyle(0xfacc15, 1);
+    graphics.fillRect(20, 2, 2, 3);
+    graphics.fillRect(23, 2, 2, 3);
+    graphics.fillStyle(0x0f172a, 1);
+    graphics.fillRect(21, 6, 1, 1);
+
+    if (flying) {
+      graphics.fillStyle(0xa78bfa, 1);
+      graphics.fillRect(4, 2, 8, 5);
+      graphics.fillRect(10, 0, 6, 5);
+      graphics.fillStyle(0xddd6fe, 0.85);
+      graphics.fillRect(6, 3, 8, 2);
+    }
+
+    graphics.generateTexture(key, width, height);
+    graphics.destroy();
+  }
+
+  private createDragonEggTexture() {
+    if (this.scene.textures.exists(PlaceholderAssets.dragonEgg)) {
+      return;
+    }
+
+    const graphics = this.scene.make.graphics({ x: 0, y: 0 }, false);
+    graphics.fillStyle(0xfef3c7, 1);
+    graphics.fillRect(4, 1, 8, 3);
+    graphics.fillRect(2, 4, 12, 9);
+    graphics.fillRect(4, 13, 8, 2);
+    graphics.fillStyle(0xef4444, 1);
+    graphics.fillRect(4, 5, 3, 3);
+    graphics.fillRect(9, 9, 3, 3);
+    graphics.lineStyle(1, 0x78350f, 1);
+    graphics.strokeRect(2.5, 3.5, 11, 10);
+    graphics.generateTexture(PlaceholderAssets.dragonEgg, 16, 16);
+    graphics.destroy();
+  }
+
   private createBonfireTexture() {
     if (this.scene.textures.exists(PlaceholderAssets.bonfire)) {
       return;
@@ -247,6 +324,24 @@ export class AssetLoader {
     graphics.fillStyle(0x38bdf8, 0.85);
     graphics.fillRect(1, 15, 18, 1);
     graphics.generateTexture(PlaceholderAssets.bonfire, 20, 18);
+    graphics.destroy();
+  }
+
+  private createFinishGateTexture() {
+    if (this.scene.textures.exists(PlaceholderAssets.finishGate)) {
+      return;
+    }
+
+    const graphics = this.scene.make.graphics({ x: 0, y: 0 }, false);
+    graphics.fillStyle(0x14532d, 1);
+    graphics.fillRect(4, 6, 8, 34);
+    graphics.fillRect(28, 6, 8, 34);
+    graphics.fillRect(4, 6, 32, 8);
+    graphics.fillStyle(0x22c55e, 1);
+    graphics.fillRect(8, 10, 24, 3);
+    graphics.fillStyle(0xfacc15, 1);
+    graphics.fillRect(17, 0, 6, 10);
+    graphics.generateTexture(PlaceholderAssets.finishGate, 40, 42);
     graphics.destroy();
   }
 }

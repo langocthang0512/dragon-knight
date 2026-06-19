@@ -19,14 +19,20 @@ export class GameScene extends Phaser.Scene {
   private debug?: DebugSystem;
   private sceneManager?: SceneManager;
   private checkpointActivated = false;
+  private coinsCollected = 0;
+  private levelStartedAt = 0;
+  private levelComplete = false;
+  private readonly eggSpawns = new Map<Phaser.Physics.Arcade.Image, { x: number; y: number }>();
 
   constructor() {
     super(SceneKeys.Game);
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#172554');
-    this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    this.cameras.main.setBackgroundColor('#101827');
+    this.physics.world.setBounds(0, 0, levelOne.worldWidth, GAME_HEIGHT);
+    this.cameras.main.setBounds(0, 0, levelOne.worldWidth, GAME_HEIGHT);
+    this.levelStartedAt = this.time.now;
 
     this.sceneManager = new SceneManager(this);
     this.inputSystem = new InputSystem(this);
@@ -41,6 +47,18 @@ export class GameScene extends Phaser.Scene {
       tile.setOrigin(0.5);
     }
 
+    for (const marker of levelOne.tutorialMarkers) {
+      this.add
+        .text(marker.x, marker.y, marker.text, {
+          fontFamily: 'monospace',
+          fontSize: '10px',
+          color: '#cbd5e1',
+          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          padding: { x: 4, y: 2 },
+        })
+        .setOrigin(0.5);
+    }
+
     const traps = this.physics.add.staticGroup();
     for (const trap of levelOne.traps) {
       const hazard = traps
@@ -48,6 +66,12 @@ export class GameScene extends Phaser.Scene {
         .setDisplaySize(trap.width, trap.height)
         .refreshBody();
       hazard.setOrigin(0.5);
+    }
+
+    const coins = this.physics.add.staticGroup();
+    for (const coin of levelOne.coins) {
+      const collectible = coins.create(coin.x, coin.y, PlaceholderAssets.coin);
+      collectible.setOrigin(0.5);
     }
 
     const bonfire = this.add.image(levelOne.checkpoint.x, levelOne.checkpoint.y, PlaceholderAssets.bonfire).setOrigin(0.5, 1);
@@ -58,10 +82,15 @@ export class GameScene extends Phaser.Scene {
     this.player = new Player(this, levelOne.playerSpawn.x, levelOne.playerSpawn.y, {
       variant: save.selectedKnight,
     });
-    this.player.setCheckpoint(levelOne.checkpoint.x, levelOne.checkpoint.y);
     this.physics.add.collider(this.player, platforms);
     this.physics.add.overlap(this.player, traps, () => {
       this.player?.takeDamage(1, 'trap');
+    });
+    this.physics.add.overlap(this.player, coins, (_player, target) => {
+      const coin = target as Phaser.Physics.Arcade.Image;
+      coin.disableBody(true, true);
+      this.coinsCollected += 1;
+      this.hud?.setCoins(this.coinsCollected);
     });
     this.physics.add.overlap(this.player, bonfireZone, () => {
       if (!this.player) {
@@ -75,33 +104,66 @@ export class GameScene extends Phaser.Scene {
 
     const enemies = this.physics.add.group();
     for (const enemySpawn of levelOne.enemies) {
-      const enemy = new Enemy(this, enemySpawn.x, enemySpawn.y);
+      const enemy = new Enemy(this, enemySpawn.x, enemySpawn.y, {
+        type: enemySpawn.type,
+        patrolDistance: enemySpawn.patrolDistance,
+        patrolSpeed: enemySpawn.patrolSpeed,
+      });
       enemies.add(enemy);
-      this.physics.add.collider(enemy, platforms);
+      if (enemySpawn.type === 'small') {
+        this.physics.add.collider(enemy, platforms);
+      }
     }
     this.physics.add.overlap(this.player, enemies, () => {
       this.player?.takeDamage(1, 'enemy');
     });
     this.physics.add.overlap(this.player.attackHitbox, enemies, (_hitbox, target) => {
-      const enemy = target as Enemy;
+      const enemy = target as unknown as Enemy;
       enemy.takeDamage(1);
     });
 
-    this.add
-      .rectangle(levelOne.goal.x, levelOne.goal.y, 14, 42, 0x22c55e)
-      .setOrigin(0.5, 1);
+    const eggs = this.physics.add.group();
+    for (const eggSpawn of levelOne.fallingEggs) {
+      const egg = eggs.create(eggSpawn.x, eggSpawn.y, PlaceholderAssets.dragonEgg) as Phaser.Physics.Arcade.Image;
+      const body = egg.body as Phaser.Physics.Arcade.Body;
+      egg.setOrigin(0.5);
+      body.setAllowGravity(true);
+      body.enable = false;
+      this.eggSpawns.set(egg, { x: eggSpawn.x, y: eggSpawn.y });
+
+      const dropEgg = () => this.dropEgg(egg);
+      this.time.delayedCall(eggSpawn.delayMs, () => {
+        dropEgg();
+        this.time.addEvent({ delay: eggSpawn.intervalMs, callback: dropEgg, loop: true });
+      });
+    }
+    this.physics.add.overlap(this.player, eggs, (_player, target) => {
+      this.player?.takeDamage(1, 'enemy');
+      this.resetEgg(target as Phaser.Physics.Arcade.Image);
+    });
+    this.physics.add.collider(eggs, platforms, (eggObject) => {
+      this.resetEgg(eggObject as Phaser.Physics.Arcade.Image);
+    });
+
+    const finishGate = this.add.image(levelOne.goal.x, levelOne.goal.y, PlaceholderAssets.finishGate).setOrigin(0.5, 1);
+    const finishZone = this.add.zone(levelOne.goal.x, levelOne.goal.y - 22, 40, 48);
+    this.physics.add.existing(finishZone, true);
+    this.physics.add.overlap(this.player, finishZone, () => this.completeLevel());
+    finishGate.setDepth(5);
 
     this.hud = new Hud(this);
     this.hud.create();
-    this.hud.setCoins(save.coins);
+    this.hud.setCoins(this.coinsCollected);
     this.hud.setHealth(this.player.getHealthSnapshot().health, this.player.getHealthSnapshot().maxHealth);
 
     this.debug = new DebugSystem(this);
-    this.debug.create('debug: A2 player / checkpoint inactive');
+    this.debug.create('debug: Level 1 / tutorial');
 
     this.events.on(PlayerEvents.HealthChanged, ({ health, maxHealth }: PlayerHealthChangedEvent) => {
       this.hud?.setHealth(health, maxHealth);
     });
+
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
   }
 
   update() {
@@ -119,7 +181,56 @@ export class GameScene extends Phaser.Scene {
     this.player?.updateFromInput(input);
 
     if (this.checkpointActivated) {
-      this.debug?.setText('debug: A2 player / bonfire checkpoint active');
+      this.debug?.setText(`debug: Level 1 / checkpoint active / coins ${this.coinsCollected}`);
     }
+  }
+
+  private dropEgg(egg: Phaser.Physics.Arcade.Image) {
+    const spawn = this.eggSpawns.get(egg);
+    if (!spawn) {
+      return;
+    }
+
+    const body = egg.body as Phaser.Physics.Arcade.Body;
+    if (body.enable) {
+      return;
+    }
+
+    egg.enableBody(true, spawn.x, spawn.y, true, true);
+    egg.setVelocityY(170);
+  }
+
+  private resetEgg(egg: Phaser.Physics.Arcade.Image) {
+    const spawn = this.eggSpawns.get(egg);
+    if (!spawn) {
+      return;
+    }
+
+    egg.disableBody(true, true);
+    egg.setPosition(spawn.x, spawn.y);
+    egg.setVelocity(0, 0);
+  }
+
+  private completeLevel() {
+    if (this.levelComplete) {
+      return;
+    }
+
+    this.levelComplete = true;
+    const save = SaveService.load();
+    const elapsedMs = Math.round(this.time.now - this.levelStartedAt);
+
+    SaveService.save({
+      ...save,
+      coins: save.coins + this.coinsCollected,
+      levelOneBestTimeMs:
+        save.levelOneBestTimeMs === undefined ? elapsedMs : Math.min(save.levelOneBestTimeMs, elapsedMs),
+    });
+
+    this.sceneManager?.start(SceneKeys.Result, {
+      coinsCollected: this.coinsCollected,
+      elapsedMs,
+      targetDurationMinutes: levelOne.targetDurationMinutes,
+    });
   }
 }

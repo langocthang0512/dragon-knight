@@ -38,6 +38,9 @@ Do not build Levels 2 or 3 yet.
 - A2 player foundation is in place with generated original placeholder sprites for male and female variants; the armor/body is shared and hair changes by variant.
 - Player gameplay includes run, jump, double jump, sword attack, coyote time, jump buffering, default 3 HP, maximum 5 HP support, enemy/trap damage for 1 HP, bonfire checkpoint, trap checkpoint respawn, and death checkpoint respawn.
 - Player animation states are wired for idle, run, jump, fall, attack, hit, and death using generated Phaser animation frames.
+- A3 Level 1 playable build is in place with empty background, ground, ledges, platforms, coins, bonfire checkpoint, spike traps, falling dragon eggs, small dragons, flying dragons, tutorial flow, and finish gate.
+- Level 1 completion saves collected coins and `levelOneBestTimeMs`, then routes to `ResultScene`.
+- Complete-run QA passed through headless Chrome/CDP: finished Level 1 with 28 coins and saved `levelOneBestTimeMs: 67178`.
 - Dev server verification passes with `npm run dev` on a temporary local port.
 - Production build passes with `npm run build`.
 - Dependency audit passed at A0 with `npm audit --audit-level=low`.
@@ -53,6 +56,7 @@ Implement the real vertical-slice menu and progression flow:
 - HUD state model
 - Level 1 gameplay loop and win condition
 - Replace generated placeholder visuals with production-safe original pixel art when an asset pipeline milestone is requested.
+- Tune Level 1 pacing and difficulty with manual playtest feedback; current A3 pass prioritizes complete playable flow over final balance.
 
 ## Standing Rules
 
