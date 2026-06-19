@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
+import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../config/gameSettings';
+import { responsiveScaleConfig } from '../core/ResponsiveScaling';
 import { BootScene } from './scenes/BootScene';
+import { GameScene } from './scenes/GameScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
-
-export const GAME_WIDTH = 480;
-export const GAME_HEIGHT = 270;
+import { PauseScene } from './scenes/PauseScene';
+import { PreloadScene } from './scenes/PreloadScene';
+import { ResultScene } from './scenes/ResultScene';
 
 export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameConfig {
   return {
@@ -11,20 +14,17 @@ export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameCon
     parent,
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
-    backgroundColor: '#101827',
+    backgroundColor: gameSettings.backgroundColor,
     pixelArt: true,
     roundPixels: true,
-    scale: {
-      mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
+    scale: responsiveScaleConfig,
     physics: {
       default: 'arcade',
       arcade: {
-        gravity: { x: 0, y: 900 },
+        gravity: { x: 0, y: gameSettings.worldGravity },
         debug: false,
       },
     },
-    scene: [BootScene, MainMenuScene],
+    scene: [BootScene, PreloadScene, MainMenuScene, GameScene, PauseScene, ResultScene],
   };
 }

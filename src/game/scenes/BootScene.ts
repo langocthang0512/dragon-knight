@@ -1,11 +1,13 @@
 import Phaser from 'phaser';
+import { SceneKeys } from '../../core/SceneKeys';
+import { SceneManager } from '../../core/SceneManager';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
-    super('BootScene');
+    super(SceneKeys.Boot);
   }
 
   create() {
-    this.scene.start('MainMenuScene');
+    new SceneManager(this).start(SceneKeys.Preload);
   }
 }

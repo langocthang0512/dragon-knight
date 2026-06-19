@@ -27,23 +27,28 @@ Do not build Levels 2 or 3 yet.
 ## Current State
 
 - Repository was empty except for `.git` at initialization.
-- Added a runnable React/Vite/TypeScript/Phaser baseline.
+- Added a runnable React/Vite/TypeScript/Phaser baseline in A0.
+- A1 foundation architecture is now in place.
 - Phaser is mounted through `src/game/PhaserGame.tsx`.
 - Game configuration lives in `src/game/config.ts`.
-- Scenes currently include `BootScene` and a placeholder `MainMenuScene`.
+- Scenes currently include `BootScene`, `PreloadScene`, `MainMenuScene`, `GameScene`, `PauseScene`, and `ResultScene`.
+- `BootScene` starts `PreloadScene`; `PreloadScene` creates generated placeholder textures; `MainMenuScene` starts the Level 1 placeholder with Enter.
+- Foundation systems exist for input, scene management, save data, generated asset loading, responsive scaling, and debug overlays.
+- Placeholder gameplay includes a controllable player, one enemy spawn, simple platforms, HUD text, and a pause overlay.
+- Dev server verification passes with `npm run dev` on a temporary local port.
 - Production build passes with `npm run build`.
-- Dependency audit passes with `npm audit --audit-level=low`.
+- Dependency audit passed at A0 with `npm audit --audit-level=low`.
 - The build currently emits a large-chunk warning because Phaser is bundled into the initial client chunk; address code-splitting later if startup size becomes a milestone requirement.
 
 ## Next Recommended Milestone
 
-Implement the real menu flow foundation:
+Implement the real vertical-slice menu and progression flow:
 
-- Main Menu navigation
-- Character Select screen shell
-- Shop screen shell
-- Shared scene transition conventions
-- Initial pixel-art placeholder asset strategy
+- Character Select scene/screen
+- Shop scene/screen
+- Main Menu options
+- HUD state model
+- Level 1 gameplay loop and win condition
 
 ## Standing Rules
 

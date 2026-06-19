@@ -15,6 +15,17 @@ The current product target is a playable vertical slice only:
 
 Levels 2 and 3 are explicitly out of scope until requested later.
 
+## Architecture
+
+- `src/game` mounts Phaser and registers game scenes.
+- `src/core` contains shared game systems such as input, scene transitions, scaling, and debug overlays.
+- `src/services` contains persistence and asset-loading helpers.
+- `src/entities` contains gameplay actors.
+- `src/ui` contains Phaser UI/HUD helpers.
+- `src/levels` contains level definitions.
+- `src/config` and `src/data` contain durable configuration and game data.
+- `src/assets`, `src/audio`, and `src/effects` are reserved for production content.
+
 ## Commands
 
 ```bash
