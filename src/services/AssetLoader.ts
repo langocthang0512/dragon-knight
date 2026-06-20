@@ -193,14 +193,14 @@ export class AssetLoader {
       return;
     }
 
-    this.drawCandidateCape(g, state, frame, bob);
-    this.drawCandidateBody(g, state, run, bob, airborne);
-    this.drawCandidateHead(g, variant, state, frame, bob);
+    this.drawLockedCape(g, state, frame, bob);
+    this.drawLockedBody(g, state, run, bob, airborne);
+    this.drawLockedHead(g, variant, state, frame, bob);
 
     if (state === 'attack') {
-      this.drawCandidateSword(g, frame);
+      this.drawLockedSword(g, frame);
     } else {
-      this.drawCandidateSheathedSword(g, bob);
+      this.drawLockedSheathedSword(g, bob);
     }
 
     if (state === 'hit') {
@@ -219,18 +219,24 @@ export class AssetLoader {
     g.destroy();
   }
 
-  private drawCandidateCape(g: Phaser.GameObjects.Graphics, state: PlayerAnimationState, frame: number, bob: number) {
-    const y = 18 + bob;
-    const wind = state === 'run' ? [-1, 0, 1, 2, 1, 0][frame] : state === 'fall' ? -1 : 0;
-    this.r(g, 5, y + 2, 17, 8, colors.ink);
-    this.r(g, 3, y + 9 + wind, 15, 9, colors.ink);
-    this.r(g, 6, y + 3, 15, 6, colors.red0);
-    this.r(g, 4, y + 10 + wind, 12, 7, colors.red1);
-    this.r(g, 7, y + 5, 7, 2, colors.red2);
-    this.r(g, 5, y + 13 + wind, 7, 2, colors.red2);
+  private drawLockedCape(g: Phaser.GameObjects.Graphics, state: PlayerAnimationState, frame: number, bob: number) {
+    const y = 17 + bob;
+    const wind = state === 'run' ? [-2, -1, 1, 2, 1, -1][frame] : state === 'fall' ? -2 : 0;
+    const lift = state === 'jump' || state === 'doubleJump' ? -1 : 0;
+
+    this.r(g, 4, y + 1 + lift, 18, 8, colors.ink);
+    this.r(g, 2, y + 8 + wind, 19, 8, colors.ink);
+    this.r(g, 5, y + 15 + wind, 12, 6, colors.ink);
+    this.r(g, 7, y + 2 + lift, 14, 6, colors.red0);
+    this.r(g, 4, y + 9 + wind, 15, 6, colors.red1);
+    this.r(g, 7, y + 15 + wind, 8, 4, colors.red0);
+    this.r(g, 9, y + 4 + lift, 8, 2, colors.red2);
+    this.r(g, 6, y + 10 + wind, 5, 2, colors.red2);
+    this.r(g, 10, y + 16 + wind, 4, 1, colors.red2);
+    this.r(g, 4, y + 17 + wind, 3, 2, colors.ink);
   }
 
-  private drawCandidateBody(
+  private drawLockedBody(
     g: Phaser.GameObjects.Graphics,
     state: PlayerAnimationState,
     run: number,
@@ -238,120 +244,179 @@ export class AssetLoader {
     airborne: boolean,
   ) {
     const y = 18 + bob + (state === 'fall' ? 1 : 0);
-    const legA = airborne ? -1 : run;
-    const legB = airborne ? 1 : -run;
-    const armLift = state === 'attack' ? -3 : 0;
+    const attack = state === 'attack';
+    const legA = airborne ? -2 : run;
+    const legB = airborne ? 2 : -run;
+    const armLift = attack ? -4 : 0;
+    const crouch = attack ? 2 : 0;
+    const rightArmX = attack ? 34 : 32;
 
-    this.r(g, 16, y, 17, 19, colors.ink);
-    this.r(g, 13, y + 3, 6, 11, colors.ink);
-    this.r(g, 31, y + 3 + armLift, 6, 12, colors.ink);
-    this.r(g, 16 + legA, y + 18, 7, 16, colors.ink);
-    this.r(g, 27 + legB, y + 18, 7, 16, colors.ink);
+    this.r(g, 15, y + crouch, 18, 19, colors.ink);
+    this.r(g, 12, y + 3 + crouch, 8, 9, colors.ink);
+    this.r(g, rightArmX - 1, y + 3 + armLift + crouch, 7, 12, colors.ink);
+    this.r(g, 16 + legA, y + 18 + crouch, 8, 15, colors.ink);
+    this.r(g, 27 + legB, y + 18 + crouch, 8, 15, colors.ink);
 
-    this.r(g, 18, y + 1, 13, 15, colors.armor0);
-    this.r(g, 19, y + 2, 10, 5, colors.armor2);
-    this.r(g, 20, y + 8, 9, 5, colors.armor1);
-    this.r(g, 20, y + 2, 5, 2, colors.armor4);
-    this.r(g, 17, y + 2, 4, 6, colors.gold0);
-    this.r(g, 31, y + 3 + armLift, 4, 6, colors.gold0);
-    this.r(g, 18, y + 3, 2, 2, colors.gold2);
-    this.r(g, 32, y + 4 + armLift, 2, 2, colors.gold2);
-    this.r(g, 19, y + 14, 12, 3, colors.leather1);
-    this.r(g, 23, y + 13, 4, 4, colors.gold2);
-    this.r(g, 23, y + 17, 5, 9, colors.red0);
-    this.r(g, 24, y + 18, 3, 5, colors.red2);
-    this.r(g, 24, y + 24, 2, 3, colors.gold1);
+    this.r(g, 18, y + 1 + crouch, 13, 15, colors.armor0);
+    this.r(g, 19, y + 2 + crouch, 10, 5, colors.armor2);
+    this.r(g, 20, y + 7 + crouch, 9, 6, colors.armor1);
+    this.r(g, 20, y + 2 + crouch, 5, 1, colors.armor4);
+    this.r(g, 28, y + 4 + crouch, 1, 7, colors.armor3);
+    this.r(g, 19, y + 11 + crouch, 11, 2, colors.ink);
+    this.r(g, 21, y + 5 + crouch, 2, 5, colors.armor3);
+    this.r(g, 25, y + 3 + crouch, 3, 2, colors.armor3);
 
-    this.r(g, 14, y + 5, 4, 9, colors.armor1);
-    this.r(g, 32, y + 5 + armLift, 4, 9, colors.armor1);
-    this.r(g, 13, y + 14, 4, 3, colors.skin1);
-    this.r(g, 34, y + 14 + armLift, 4, 3, colors.skin1);
+    this.r(g, 15, y + 1 + crouch, 6, 6, colors.gold0);
+    this.r(g, 14, y + 2 + crouch, 7, 3, colors.gold1);
+    this.r(g, 16, y + 3 + crouch, 3, 2, colors.gold2);
+    this.r(g, 31, y + 2 + armLift + crouch, 6, 6, colors.gold0);
+    this.r(g, 31, y + 3 + armLift + crouch, 6, 3, colors.gold1);
+    this.r(g, 32, y + 4 + armLift + crouch, 3, 1, colors.gold2);
 
-    this.r(g, 17 + legA, y + 20, 5, 11, colors.armor0);
-    this.r(g, 28 + legB, y + 20, 5, 11, colors.armor0);
-    this.r(g, 18 + legA, y + 22, 2, 5, colors.armor2);
-    this.r(g, 29 + legB, y + 22, 2, 5, colors.armor2);
-    this.r(g, 15 + legA, y + 32, 10, 4, colors.ink);
-    this.r(g, 26 + legB, y + 32, 10, 4, colors.ink);
-    this.r(g, 16 + legA, y + 32, 8, 3, colors.boot);
-    this.r(g, 27 + legB, y + 32, 8, 3, colors.boot);
-    this.r(g, 20 + legA, y + 28, 2, 2, colors.gold1);
-    this.r(g, 31 + legB, y + 28, 2, 2, colors.gold1);
+    this.r(g, 18, y + 13 + crouch, 13, 3, colors.leather0);
+    this.r(g, 19, y + 14 + crouch, 11, 2, colors.leather1);
+    this.r(g, 23, y + 12 + crouch, 5, 5, colors.ink);
+    this.r(g, 24, y + 13 + crouch, 3, 3, colors.gold2);
+    this.r(g, 24, y + 14 + crouch, 1, 1, colors.fire2);
+    this.r(g, 22, y + 17 + crouch, 7, 9, colors.ink);
+    this.r(g, 23, y + 17 + crouch, 5, 8, colors.red0);
+    this.r(g, 24, y + 18 + crouch, 3, 5, colors.red2);
+    this.r(g, 25, y + 24 + crouch, 2, 2, colors.gold1);
+
+    this.r(g, 13, y + 5 + crouch, 5, 8, colors.armor0);
+    this.r(g, 14, y + 6 + crouch, 3, 6, colors.armor2);
+    this.r(g, 13, y + 12 + crouch, 5, 3, colors.leather0);
+    this.r(g, 14, y + 15 + crouch, 4, 2, colors.skin1);
+    this.r(g, 34, y + 5 + armLift + crouch, 5, 8, colors.armor0);
+    this.r(g, 35, y + 6 + armLift + crouch, 3, 6, colors.armor2);
+    this.r(g, 34, y + 12 + armLift + crouch, 5, 3, colors.leather0);
+    this.r(g, 35, y + 15 + armLift + crouch, 4, 2, colors.skin1);
+    this.r(g, 16, y + 7 + crouch, 2, 2, colors.gold1);
+    this.r(g, 35, y + 7 + armLift + crouch, 2, 2, colors.gold1);
+
+    this.r(g, 17 + legA, y + 20 + crouch, 6, 10, colors.armor0);
+    this.r(g, 28 + legB, y + 20 + crouch, 6, 10, colors.armor0);
+    this.r(g, 18 + legA, y + 22 + crouch, 2, 5, colors.armor2);
+    this.r(g, 30 + legB, y + 21 + crouch, 2, 6, colors.armor2);
+    this.r(g, 20 + legA, y + 28 + crouch, 2, 2, colors.gold1);
+    this.r(g, 30 + legB, y + 28 + crouch, 2, 2, colors.gold1);
+    this.r(g, 15 + legA, y + 30 + crouch, 10, 5, colors.ink);
+    this.r(g, 26 + legB, y + 30 + crouch, 10, 5, colors.ink);
+    this.r(g, 16 + legA, y + 31 + crouch, 8, 3, colors.boot);
+    this.r(g, 27 + legB, y + 31 + crouch, 8, 3, colors.boot);
+    this.r(g, 18 + legA, y + 30 + crouch, 5, 1, colors.gold0);
+    this.r(g, 29 + legB, y + 30 + crouch, 5, 1, colors.gold0);
+    this.r(g, 16 + legA, y + 34 + crouch, 7, 1, colors.leather1);
+    this.r(g, 27 + legB, y + 34 + crouch, 7, 1, colors.leather1);
   }
 
-  private drawCandidateHead(
+  private drawLockedHead(
     g: Phaser.GameObjects.Graphics,
     variant: PlayerVariant,
     state: PlayerAnimationState,
     frame: number,
     bob: number,
   ) {
-    const y = 5 + bob + (state === 'jump' ? -1 : 0);
-    this.r(g, 17, y + 4, 15, 13, colors.ink);
-    this.r(g, 18, y + 6, 12, 9, colors.skin1);
-    this.r(g, 19, y + 7, 5, 2, colors.skin2);
+    const y = 5 + bob + (state === 'jump' || state === 'doubleJump' ? -1 : 0) + (state === 'attack' ? 1 : 0);
+
+    this.r(g, 16, y + 4, 16, 13, colors.ink);
+    this.r(g, 17, y + 6, 13, 9, colors.skin1);
+    this.r(g, 18, y + 7, 5, 2, colors.skin2);
+    this.r(g, 28, y + 8, 3, 2, colors.skin2);
     this.r(g, 29, y + 10, 2, 2, colors.eye);
-    this.r(g, 23, y + 14, 5, 1, colors.skin0);
-    this.r(g, 18, y + 16, 14, 4, colors.red0);
-    this.r(g, 20, y + 16, 9, 2, colors.red1);
+    this.r(g, 26, y + 10, 2, 1, colors.ink);
+    this.r(g, 21, y + 12, 2, 1, colors.skin0);
+    this.r(g, 24, y + 14, 5, 1, colors.skin0);
+    this.r(g, 17, y + 16, 16, 5, colors.ink);
+    this.r(g, 18, y + 16, 14, 3, colors.red0);
+    this.r(g, 20, y + 16, 9, 1, colors.red2);
+    this.r(g, 15, y + 18, 4, 3, colors.red1);
 
     if (variant === 'male') {
-      this.r(g, 13, y + 2, 22, 7, colors.ink);
-      this.r(g, 16, y - 1, 6, 4, colors.ink);
-      this.r(g, 24, y - 2, 5, 4, colors.ink);
-      this.r(g, 32, y + 3, 4, 6, colors.ink);
-      this.r(g, 14, y + 3, 20, 5, colors.hair0);
-      this.r(g, 17, y, 4, 3, colors.hair1);
-      this.r(g, 25, y - 1, 3, 3, colors.hair1);
-      this.r(g, 31, y + 4, 3, 5, colors.hair1);
-      this.r(g, 19, y + 2, 6, 1, colors.hair2);
+      this.r(g, 13, y + 2, 23, 7, colors.ink);
+      this.r(g, 15, y - 1, 8, 4, colors.ink);
+      this.r(g, 22, y - 3, 7, 5, colors.ink);
+      this.r(g, 29, y - 1, 5, 5, colors.ink);
+      this.r(g, 33, y + 3, 4, 7, colors.ink);
+      this.r(g, 14, y + 4, 20, 5, colors.hair0);
+      this.r(g, 16, y + 1, 6, 3, colors.hair1);
+      this.r(g, 23, y - 1, 5, 3, colors.hair1);
+      this.r(g, 30, y + 1, 3, 4, colors.hair1);
+      this.r(g, 33, y + 5, 2, 4, colors.hair1);
+      this.r(g, 18, y + 3, 8, 1, colors.hair2);
+      this.r(g, 27, y + 2, 4, 1, colors.hair2);
+      this.r(g, 14, y + 8, 3, 3, colors.hair0);
       return;
     }
 
     const sway = state === 'run' ? (frame % 2 === 0 ? 1 : -1) : 0;
-    this.r(g, 14, y + 2, 22, 7, colors.ink);
-    this.r(g, 10 + sway, y + 8, 9, 18, colors.ink);
-    this.r(g, 6 + sway, y + 15, 8, 9, colors.ink);
-    this.r(g, 15, y + 3, 19, 5, colors.fHair0);
-    this.r(g, 11 + sway, y + 9, 7, 16, colors.fHair0);
+    this.r(g, 14, y + 2, 22, 8, colors.ink);
+    this.r(g, 10 + sway, y + 7, 10, 18, colors.ink);
+    this.r(g, 6 + sway, y + 15, 9, 9, colors.ink);
+    this.r(g, 15, y + 3, 19, 6, colors.fHair0);
+    this.r(g, 17, y + 1, 10, 3, colors.fHair1);
+    this.r(g, 28, y + 4, 5, 4, colors.fHair1);
+    this.r(g, 11 + sway, y + 8, 8, 16, colors.fHair0);
     this.r(g, 7 + sway, y + 16, 7, 7, colors.fHair1);
-    this.r(g, 18, y + 4, 10, 2, colors.fHair1);
     this.r(g, 13 + sway, y + 11, 4, 8, colors.fHair2);
-    this.r(g, 11 + sway, y + 9, 3, 2, colors.gold2);
+    this.r(g, 18, y + 4, 9, 2, colors.fHair2);
+    this.r(g, 10 + sway, y + 9, 5, 3, colors.gold0);
+    this.r(g, 11 + sway, y + 9, 3, 1, colors.gold2);
   }
 
-  private drawCandidateSheathedSword(g: Phaser.GameObjects.Graphics, bob: number) {
-    this.r(g, 32, 21 + bob, 4, 16, colors.ink);
-    this.r(g, 34, 22 + bob, 1, 13, colors.metal0);
+  private drawLockedSheathedSword(g: Phaser.GameObjects.Graphics, bob: number) {
+    this.r(g, 32, 21 + bob, 5, 16, colors.ink);
+    this.r(g, 34, 22 + bob, 2, 13, colors.metal0);
     this.r(g, 33, 23 + bob, 1, 8, colors.metal1);
-    this.r(g, 31, 29 + bob, 6, 2, colors.gold1);
+    this.r(g, 35, 24 + bob, 1, 7, colors.armor3);
+    this.r(g, 31, 29 + bob, 7, 3, colors.ink);
+    this.r(g, 32, 29 + bob, 5, 1, colors.gold2);
+    this.r(g, 35, 35 + bob, 2, 2, colors.fire0);
   }
 
-  private drawCandidateSword(g: Phaser.GameObjects.Graphics, frame: number) {
-    const x = 34 + frame * 2;
+  private drawLockedSword(g: Phaser.GameObjects.Graphics, frame: number) {
+    const x = 31 + frame;
     const y = 23 - frame;
-    this.r(g, x, y, 12, 5, colors.ink);
-    this.r(g, x + 9, y - 3, 5, 6, colors.ink);
-    this.r(g, x + 1, y + 1, 10, 2, colors.metal0);
-    this.r(g, x + 2, y, 8, 1, colors.metal1);
-    this.r(g, x - 3, y - 1, 6, 7, colors.gold2);
-    this.r(g, x - 4, y + 6, 3, 4, colors.ink);
-    this.r(g, x - 3, y + 7, 1, 1, colors.fire0);
-    this.r(g, 32, 12 - frame, 16, 2, colors.fire3, 0.9);
-    this.r(g, 35, 15 - frame, 14, 2, colors.fire2, 0.75);
-    this.r(g, 38, 18 - frame, 10, 2, colors.fire1, 0.55);
+    this.r(g, x + 1, y + 1, 15, 5, colors.ink);
+    this.r(g, x + 12, y - 2, 5, 6, colors.ink);
+    this.r(g, x + 2, y + 2, 12, 2, colors.metal0);
+    this.r(g, x + 3, y + 1, 10, 1, colors.metal1);
+    this.r(g, x + 13, y, 2, 2, colors.metal1);
+    this.r(g, x - 4, y - 1, 7, 7, colors.ink);
+    this.r(g, x - 3, y, 5, 5, colors.gold1);
+    this.r(g, x - 2, y + 1, 3, 2, colors.gold2);
+    this.r(g, x - 5, y + 5, 4, 5, colors.ink);
+    this.r(g, x - 4, y + 6, 2, 3, colors.leather1);
+    this.r(g, x - 3, y + 8, 1, 1, colors.fire0);
+
+    this.r(g, 30, 12 - frame, 16, 2, colors.fire3, 0.94);
+    this.r(g, 33, 10 - frame, 10, 1, colors.fire2, 0.85);
+    this.r(g, 34, 15 - frame, 14, 2, colors.fire2, 0.8);
+    this.r(g, 37, 18 - frame, 10, 2, colors.fire1, 0.62);
+    this.r(g, 42, 21 - frame, 5, 1, colors.fire0, 0.55);
+    this.r(g, 44, 9 - frame, 2, 2, colors.fire3, 0.82);
+    this.r(g, 46, 14 - frame, 1, 1, colors.fire2, 0.9);
   }
 
   private drawFallenKnight(g: Phaser.GameObjects.Graphics, variant: PlayerVariant, frame: number) {
-    const y = 35 + frame;
-    this.r(g, 8, y, 28, 9, colors.ink);
-    this.r(g, 32, y - 3, 10, 7, colors.ink);
-    this.r(g, 10, y + 1, 23, 6, colors.armor0);
-    this.r(g, 12, y + 3, 10, 2, colors.armor2);
-    this.r(g, 4, y + 2, 15, 4, colors.red0);
-    this.r(g, 34, y - 2, 7, 5, colors.skin1);
+    const y = 34 + frame;
+    this.r(g, 7, y + 1, 29, 9, colors.ink);
+    this.r(g, 31, y - 3, 11, 7, colors.ink);
+    this.r(g, 10, y + 2, 23, 5, colors.armor0);
+    this.r(g, 12, y + 3, 11, 2, colors.armor2);
+    this.r(g, 23, y + 4, 7, 2, colors.red0);
+    this.r(g, 4, y + 2, 16, 5, colors.ink);
+    this.r(g, 5, y + 3, 14, 3, colors.red1);
+    this.r(g, 8, y + 3, 8, 1, colors.red2);
+    this.r(g, 32, y - 2, 8, 5, colors.skin1);
+    this.r(g, 36, y, 2, 1, colors.eye);
+    this.r(g, 30, y - 5, 13, 4, colors.ink);
     this.r(g, 31, y - 4, 11, 3, variant === 'female' ? colors.fHair1 : colors.hair1);
-    this.r(g, 24, y + 3, 5, 2, colors.gold2);
+    this.r(g, 33, y - 5, 5, 1, variant === 'female' ? colors.fHair2 : colors.hair2);
+    this.r(g, 23, y + 3, 6, 3, colors.ink);
+    this.r(g, 24, y + 4, 4, 1, colors.gold2);
+    this.r(g, 13, y + 8, 9, 2, colors.boot);
+    this.r(g, 26, y + 8, 8, 2, colors.boot);
   }
 
   private createStoneTileTexture() {
