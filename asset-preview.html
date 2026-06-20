@@ -96,7 +96,7 @@
 
           states.forEach((state, index) => {
             const key = playerAnimationKey(variant, state);
-            const sprite = this.add.sprite(x + 88 + index * 74, y + 18, `${key}-0`).setScale(1.75);
+            const sprite = this.add.sprite(x + 84 + index * 82, y + 18, `${key}-0`).setScale(0.48);
             sprite.play(key);
             this.add
               .text(sprite.x, y + 42, state, {

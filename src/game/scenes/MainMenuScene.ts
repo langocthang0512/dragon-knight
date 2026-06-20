@@ -32,7 +32,7 @@ export class MainMenuScene extends Phaser.Scene {
 
     this.add
       .sprite(112, 158, `${playerAnimationKey(save.selectedKnight, 'idle')}-0`)
-      .setScale(1.9)
+      .setScale(0.95)
       .setDepth(15)
       .play(playerAnimationKey(save.selectedKnight, 'idle'));
     this.add.image(112, 202, PlaceholderAssets.tile).setScale(2.2, 1).setDepth(8);

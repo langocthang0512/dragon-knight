@@ -42,14 +42,14 @@ const playerStates: PlayerAnimationState[] = [
 ];
 
 const stateFrameCounts: Record<PlayerAnimationState, number> = {
-  idle: 4,
-  run: 6,
+  idle: 1,
+  run: 3,
   jump: 1,
   doubleJump: 1,
   fall: 1,
-  attack: 4,
-  hit: 2,
-  death: 3,
+  attack: 1,
+  hit: 1,
+  death: 1,
 };
 
 const PLAYER_W = 48;
@@ -113,12 +113,35 @@ export function playerAnimationKey(variant: PlayerVariant, state: PlayerAnimatio
   return `player-${variant}-${state}`;
 }
 
+function playerFrameKey(variant: PlayerVariant, state: PlayerAnimationState, frame: number) {
+  return `${playerAnimationKey(variant, state)}-${frame}`;
+}
+
+function approvedCharacterFramePath(variant: PlayerVariant, state: PlayerAnimationState, frame: number) {
+  return `/assets/characters/final/${variant}-${state}-${frame}.png`;
+}
+
 export class AssetLoader {
   constructor(private readonly scene: Phaser.Scene) {}
 
+  preloadCharacterAssets() {
+    for (const variant of ['male', 'female'] as PlayerVariant[]) {
+      for (const state of playerStates) {
+        for (let frame = 0; frame < stateFrameCounts[state]; frame += 1) {
+          const key = playerFrameKey(variant, state, frame);
+          if (!this.scene.textures.exists(key)) {
+            this.scene.load.image(key, approvedCharacterFramePath(variant, state, frame));
+          }
+        }
+      }
+    }
+
+    if (!this.scene.textures.exists(PlaceholderAssets.player)) {
+      this.scene.load.image(PlaceholderAssets.player, approvedCharacterFramePath('male', 'idle', 0));
+    }
+  }
+
   createGeneratedTextures() {
-    this.createPlayerTextures('male');
-    this.createPlayerTextures('female');
     this.createDragonTexture(PlaceholderAssets.enemy, 'small');
     this.createDragonTexture(PlaceholderAssets.dragonSmall, 'small');
     this.createDragonTexture(PlaceholderAssets.dragonFlying, 'flying');
@@ -143,7 +166,7 @@ export class AssetLoader {
   private createPlayerTextures(variant: PlayerVariant) {
     for (const state of playerStates) {
       for (let frame = 0; frame < stateFrameCounts[state]; frame += 1) {
-        this.createPlayerFrame(`${playerAnimationKey(variant, state)}-${frame}`, variant, state, frame);
+        this.createPlayerFrame(playerFrameKey(variant, state, frame), variant, state, frame);
       }
     }
 
@@ -163,7 +186,7 @@ export class AssetLoader {
 
         this.scene.anims.create({
           key,
-          frames: Array.from({ length: stateFrameCounts[state] }, (_, frame) => ({ key: `${key}-${frame}` })),
+          frames: Array.from({ length: stateFrameCounts[state] }, (_, frame) => ({ key: playerFrameKey(variant, state, frame) })),
           frameRate: state === 'run' ? 12 : state === 'attack' ? 16 : state === 'death' ? 4 : 6,
           repeat: state === 'idle' || state === 'run' ? -1 : 0,
         });

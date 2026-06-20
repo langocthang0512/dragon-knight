@@ -29,7 +29,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       }
       this.add
         .sprite(x, 120, `${playerAnimationKey(character.id, 'idle')}-0`)
-        .setScale(1.85)
+        .setScale(0.95)
         .setDepth(15)
         .play(playerAnimationKey(character.id, 'idle'));
       addPixelButton(this, x, 174, character.name, { hotkey: `${index + 1}`, selected, tone: selected ? 'wood' : 'stone' });

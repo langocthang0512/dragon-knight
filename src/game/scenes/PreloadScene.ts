@@ -9,6 +9,10 @@ export class PreloadScene extends Phaser.Scene {
     super(SceneKeys.Preload);
   }
 
+  preload() {
+    new AssetLoader(this).preloadCharacterAssets();
+  }
+
   create() {
     new AssetLoader(this).createGeneratedTextures();
 
