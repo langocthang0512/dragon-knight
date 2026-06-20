@@ -4,8 +4,9 @@ import { characters } from '../../data/characters';
 import { SceneKeys } from '../../core/SceneKeys';
 import { SceneManager } from '../../core/SceneManager';
 import { PlayerVariant } from '../../entities/player/playerTypes';
-import { playerAnimationKey } from '../../services/AssetLoader';
+import { PlaceholderAssets, playerAnimationKey } from '../../services/AssetLoader';
 import { SaveService } from '../../services/SaveService';
+import { addFooterHint, addMenuBackdrop, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
 
 export class CharacterSelectScene extends Phaser.Scene {
   constructor() {
@@ -16,46 +17,34 @@ export class CharacterSelectScene extends Phaser.Scene {
     const sceneManager = new SceneManager(this);
     const save = SaveService.load();
 
-    this.cameras.main.setBackgroundColor(gameSettings.backgroundColor);
-    this.add
-      .text(GAME_WIDTH / 2, 42, 'SELECT CHARACTER', {
-        fontFamily: 'monospace',
-        fontSize: '20px',
-        color: '#f8fafc',
-      })
-      .setOrigin(0.5);
+    addMenuBackdrop(this);
+    addScreenTitle(this, 'SELECT CHARACTER', 36);
 
     characters.forEach((character, index) => {
       const x = index === 0 ? 156 : 324;
       const selected = save.selectedKnight === character.id;
 
+      if (selected) {
+        this.add.image(x, 128, PlaceholderAssets.selectionFrame).setScale(1.35).setDepth(8);
+      }
       this.add
-        .sprite(x, 112, `${playerAnimationKey(character.id, 'idle')}-0`)
-        .setScale(2)
+        .sprite(x, 120, `${playerAnimationKey(character.id, 'idle')}-0`)
+        .setScale(1.85)
+        .setDepth(15)
         .play(playerAnimationKey(character.id, 'idle'));
+      addPixelButton(this, x, 174, character.name, { hotkey: `${index + 1}`, selected, tone: selected ? 'wood' : 'stone' });
       this.add
-        .text(x, 156, `${index + 1}. ${character.name}`, {
-          fontFamily: 'monospace',
-          fontSize: '12px',
-          color: selected ? '#fde68a' : '#f8fafc',
-        })
-        .setOrigin(0.5);
-      this.add
-        .text(x, 176, character.hair, {
+        .text(x, 198, character.hair, {
           fontFamily: 'monospace',
           fontSize: '9px',
-          color: '#94a3b8',
+          color: '#d7e8d0',
+          stroke: '#050509',
+          strokeThickness: 3,
         })
         .setOrigin(0.5);
     });
 
-    this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 36, '1 male | 2 female | ESC menu', {
-        fontFamily: 'monospace',
-        fontSize: '11px',
-        color: '#cbd5e1',
-      })
-      .setOrigin(0.5);
+    addFooterHint(this, '1 male | 2 female | ESC menu');
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (event.key === '1') {

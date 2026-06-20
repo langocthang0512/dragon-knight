@@ -2,8 +2,9 @@ import Phaser from 'phaser';
 import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../../config/gameSettings';
 import { SceneKeys } from '../../core/SceneKeys';
 import { SceneManager } from '../../core/SceneManager';
-import { playerAnimationKey } from '../../services/AssetLoader';
+import { PlaceholderAssets, playerAnimationKey } from '../../services/AssetLoader';
 import { SaveService } from '../../services/SaveService';
+import { addFooterHint, addMenuBackdrop, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
 
 export class MainMenuScene extends Phaser.Scene {
   constructor() {
@@ -15,30 +16,26 @@ export class MainMenuScene extends Phaser.Scene {
     const save = SaveService.load();
     const bestTime = save.levelOneBestTimeMs ? this.formatTime(save.levelOneBestTimeMs) : 'none';
 
-    this.cameras.main.setBackgroundColor(gameSettings.backgroundColor);
-
-    this.add
-      .text(GAME_WIDTH / 2, 58, gameSettings.title, {
-        fontFamily: 'monospace',
-        fontSize: '28px',
-        color: '#f8fafc',
-        align: 'center',
-      })
-      .setOrigin(0.5);
+    addMenuBackdrop(this);
+    addScreenTitle(this, gameSettings.title, 35);
 
     this.add
       .text(GAME_WIDTH / 2, 96, `Coins ${save.coins} | Hearts ${save.maxHealth}/${gameSettings.maxHealth} | Best ${bestTime}`, {
         fontFamily: 'monospace',
-        fontSize: '12px',
-        color: '#cbd5e1',
+        fontSize: '10px',
+        color: '#fff2b8',
+        stroke: '#050509',
+        strokeThickness: 3,
         align: 'center',
       })
       .setOrigin(0.5);
 
     this.add
-      .sprite(112, 154, `${playerAnimationKey(save.selectedKnight, 'idle')}-0`)
-      .setScale(2)
+      .sprite(112, 158, `${playerAnimationKey(save.selectedKnight, 'idle')}-0`)
+      .setScale(1.9)
+      .setDepth(15)
       .play(playerAnimationKey(save.selectedKnight, 'idle'));
+    this.add.image(112, 202, PlaceholderAssets.tile).setScale(2.2, 1).setDepth(8);
 
     const options = [
       { key: 'ENTER', label: 'Start', action: () => sceneManager.start(SceneKeys.Game) },
@@ -49,23 +46,15 @@ export class MainMenuScene extends Phaser.Scene {
     ];
 
     options.forEach((option, index) => {
-      this.add
-        .text(178, 128 + index * 22, `${option.key.padEnd(5, ' ')} ${option.label}`, {
-          fontFamily: 'monospace',
-          fontSize: '13px',
-          color: index === 0 ? '#fde68a' : '#f8fafc',
-        })
-        .setOrigin(0, 0.5);
+      addPixelButton(this, 302, 125 + index * 25, option.label, {
+        hotkey: option.key,
+        selected: index === 0,
+        tone: index === 0 ? 'wood' : 'stone',
+        width: 176,
+      });
     });
 
-    this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'A4 playable release menu', {
-        fontFamily: 'monospace',
-        fontSize: '10px',
-        color: '#94a3b8',
-        align: 'center',
-      })
-      .setOrigin(0.5);
+    addFooterHint(this, 'A6 visual rebuild v2');
 
     this.input.keyboard?.once('keydown-ENTER', options[0].action);
     this.input.keyboard?.once('keydown-S', options[1].action);
@@ -79,7 +68,9 @@ export class MainMenuScene extends Phaser.Scene {
       .text(GAME_WIDTH / 2, GAME_HEIGHT - 42, 'Exit requested. Close the browser tab to leave.', {
         fontFamily: 'monospace',
         fontSize: '10px',
-        color: '#fca5a5',
+        color: '#fff2b8',
+        stroke: '#050509',
+        strokeThickness: 3,
       })
       .setOrigin(0.5);
   }

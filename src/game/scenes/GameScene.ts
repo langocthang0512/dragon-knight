@@ -20,6 +20,7 @@ export class GameScene extends Phaser.Scene {
   private sceneManager?: SceneManager;
   private checkpointActivated = false;
   private coinsCollected = 0;
+  private lastHealth = 0;
   private levelStartedAt = 0;
   private levelComplete = false;
   private readonly eggSpawns = new Map<Phaser.Physics.Arcade.Image, { x: number; y: number }>();
@@ -49,14 +50,21 @@ export class GameScene extends Phaser.Scene {
 
     for (const marker of levelOne.tutorialMarkers) {
       this.add
+        .image(marker.x, marker.y, PlaceholderAssets.uiButtonStone)
+        .setDisplaySize(Math.max(104, marker.text.length * 6), 22)
+        .setOrigin(0.5)
+        .setAlpha(0.82)
+        .setDepth(2);
+      this.add
         .text(marker.x, marker.y, marker.text, {
           fontFamily: 'monospace',
           fontSize: '10px',
-          color: '#cbd5e1',
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
-          padding: { x: 4, y: 2 },
+          color: '#172033',
+          stroke: '#c7d6de',
+          strokeThickness: 1,
         })
-        .setOrigin(0.5);
+        .setOrigin(0.5)
+        .setDepth(3);
     }
 
     const traps = this.physics.add.staticGroup();
@@ -89,6 +97,7 @@ export class GameScene extends Phaser.Scene {
     });
     this.physics.add.overlap(this.player, coins, (_player, target) => {
       const coin = target as Phaser.Physics.Arcade.Image;
+      this.spawnOneShot(PlaceholderAssets.coinPickup, coin.x, coin.y, 1.2, 260);
       coin.disableBody(true, true);
       this.coinsCollected += 1;
       this.hud?.setCoins(this.coinsCollected);
@@ -99,6 +108,9 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.player.setCheckpoint(levelOne.checkpoint.x, levelOne.checkpoint.y);
+      if (!this.checkpointActivated) {
+        this.spawnOneShot(PlaceholderAssets.checkpointBurst, levelOne.checkpoint.x, levelOne.checkpoint.y - 28, 1.2, 420);
+      }
       bonfire.setTint(0xfef08a);
       this.checkpointActivated = true;
     });
@@ -156,6 +168,7 @@ export class GameScene extends Phaser.Scene {
     this.hud.create();
     this.hud.setCoins(this.coinsCollected);
     this.hud.setHealth(this.player.getHealthSnapshot().health, this.player.getHealthSnapshot().maxHealth);
+    this.lastHealth = this.player.getHealthSnapshot().health;
 
     if (save.settings.showDebug) {
       this.debug = new DebugSystem(this);
@@ -164,9 +177,17 @@ export class GameScene extends Phaser.Scene {
 
     this.events.on(PlayerEvents.HealthChanged, ({ health, maxHealth }: PlayerHealthChangedEvent) => {
       this.hud?.setHealth(health, maxHealth);
+      if (this.player && health < this.lastHealth) {
+        this.spawnOneShot(health <= 0 ? PlaceholderAssets.deathBurst : PlaceholderAssets.damage, this.player.x, this.player.y - 24, 1.35, 260);
+      }
+      this.lastHealth = health;
       if (health <= 0 && !this.levelComplete) {
         this.sceneManager?.start(SceneKeys.GameOver);
       }
+    });
+
+    this.events.on(PlayerEvents.Respawned, ({ x, y }: { x: number; y: number }) => {
+      this.spawnOneShot(PlaceholderAssets.dust, x, y - 4, 1.2, 240);
     });
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
@@ -215,6 +236,17 @@ export class GameScene extends Phaser.Scene {
     egg.disableBody(true, true);
     egg.setPosition(spawn.x, spawn.y);
     egg.setVelocity(0, 0);
+  }
+
+  private spawnOneShot(key: string, x: number, y: number, scale: number, durationMs: number) {
+    const sprite = this.add.image(x, y, key).setScale(scale).setDepth(35);
+    this.tweens.add({
+      targets: sprite,
+      y: y - 8,
+      alpha: 0,
+      duration: durationMs,
+      onComplete: () => sprite.destroy(),
+    });
   }
 
   private completeLevel() {

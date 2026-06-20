@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { PlaceholderAssets } from '../../services/AssetLoader';
 
-export type EnemyType = 'small' | 'flying';
+export type EnemyType = 'small' | 'flying' | 'heavy';
 
 type EnemyOptions = {
   type: EnemyType;
@@ -17,7 +17,12 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   private readonly patrolSpeed: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, options: EnemyOptions) {
-    const textureKey = options.type === 'flying' ? PlaceholderAssets.dragonFlying : PlaceholderAssets.dragonSmall;
+    const textureKey =
+      options.type === 'flying'
+        ? PlaceholderAssets.dragonFlying
+        : options.type === 'heavy'
+          ? PlaceholderAssets.dragonHeavy
+          : PlaceholderAssets.dragonSmall;
     super(scene, x, y, textureKey);
 
     this.spawnX = x;
@@ -32,8 +37,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setImmovable(true);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(options.type === 'flying' ? 24 : 22, 14);
-    body.setOffset(2, options.type === 'flying' ? 4 : 4);
+    body.setSize(options.type === 'flying' ? 30 : options.type === 'heavy' ? 34 : 26, options.type === 'heavy' ? 18 : 14);
+    body.setOffset(options.type === 'flying' ? 22 : 18, options.type === 'flying' ? 20 : options.type === 'heavy' ? 26 : 20);
 
     if (options.type === 'flying') {
       body.setAllowGravity(false);

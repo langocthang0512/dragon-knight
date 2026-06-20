@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dragon Knight Asset Preview</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #071f25;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import Phaser from 'phaser';
+      import { AssetLoader, PlaceholderAssets, playerAnimationKey } from './src/services/AssetLoader.ts';
+
+      class AssetPreviewScene extends Phaser.Scene {
+        constructor() {
+          super('AssetPreviewScene');
+        }
+
+        create() {
+          new AssetLoader(this).createGeneratedTextures();
+          this.cameras.main.setBackgroundColor('#071f25');
+
+          this.add
+            .text(16, 12, 'DRAGON KNIGHT - A6 ASSET REBUILD V2', {
+              fontFamily: 'monospace',
+              fontSize: '12px',
+              color: '#f8fafc',
+            })
+            .setOrigin(0);
+
+          this.section('PLAYER ANIMATIONS', 18, 42);
+          this.playerRow('male', 20, 70);
+          this.playerRow('female', 20, 118);
+
+          this.section('ENEMIES', 18, 176);
+          this.spriteLabel(56, 220, PlaceholderAssets.dragonSmall, 'small dragon', 2);
+          this.spriteLabel(170, 220, PlaceholderAssets.dragonFlying, 'flying dragon', 2);
+          this.spriteLabel(304, 220, PlaceholderAssets.dragonHeavy, 'heavy dragon', 2);
+
+          this.section('WORLD', 18, 282);
+          this.spriteLabel(50, 322, PlaceholderAssets.tile, 'moss stone', 2);
+          this.spriteLabel(140, 322, PlaceholderAssets.coin, 'dragon coin', 3);
+          this.spriteLabel(226, 322, PlaceholderAssets.bonfire, 'checkpoint', 2);
+          this.spriteLabel(330, 322, PlaceholderAssets.trap, 'spikes', 2);
+          this.spriteLabel(424, 322, PlaceholderAssets.dragonEgg, 'egg', 2);
+          this.spriteLabel(518, 322, PlaceholderAssets.finishGate, 'finish', 1.6);
+
+          this.section('VFX', 18, 390);
+          this.spriteLabel(56, 432, PlaceholderAssets.slash, 'slash', 2);
+          this.spriteLabel(146, 432, PlaceholderAssets.dust, 'dust', 2);
+          this.spriteLabel(230, 432, PlaceholderAssets.jumpBurst, 'jump', 2);
+          this.spriteLabel(318, 432, PlaceholderAssets.coinPickup, 'coin pickup', 2);
+          this.spriteLabel(422, 432, PlaceholderAssets.damage, 'damage', 2);
+          this.spriteLabel(530, 432, PlaceholderAssets.checkpointBurst, 'checkpoint vfx', 1.8);
+          this.spriteLabel(648, 432, PlaceholderAssets.deathBurst, 'death', 2);
+
+          this.section('UI', 18, 500);
+          this.spriteLabel(62, 542, PlaceholderAssets.uiPanel, 'stone panel', 0.4);
+          this.spriteLabel(188, 542, PlaceholderAssets.uiButtonStone, 'stone button', 0.75);
+          this.spriteLabel(330, 542, PlaceholderAssets.uiButtonWood, 'wood button', 0.8);
+          this.spriteLabel(442, 542, PlaceholderAssets.heartFull, 'heart', 2.5);
+          this.spriteLabel(510, 542, PlaceholderAssets.coinHud, 'hud coin', 2);
+        }
+
+        section(label, x, y) {
+          this.add
+            .text(x, y, label, {
+              fontFamily: 'monospace',
+              fontSize: '9px',
+              color: '#fde68a',
+            })
+            .setOrigin(0);
+        }
+
+        playerRow(variant, x, y) {
+          const states = ['idle', 'run', 'jump', 'doubleJump', 'fall', 'attack', 'hit', 'death'];
+          this.add
+            .text(x, y + 10, variant.toUpperCase(), {
+              fontFamily: 'monospace',
+              fontSize: '8px',
+              color: '#cbd5e1',
+            })
+            .setOrigin(0);
+
+          states.forEach((state, index) => {
+            const key = playerAnimationKey(variant, state);
+            const sprite = this.add.sprite(x + 88 + index * 74, y + 18, `${key}-0`).setScale(1.75);
+            sprite.play(key);
+            this.add
+              .text(sprite.x, y + 42, state, {
+                fontFamily: 'monospace',
+                fontSize: '7px',
+                color: '#94a3b8',
+              })
+              .setOrigin(0.5);
+          });
+        }
+
+        spriteLabel(x, y, key, label, scale) {
+          this.add.sprite(x, y, key).setScale(scale);
+          this.add
+            .text(x, y + 42, label, {
+              fontFamily: 'monospace',
+              fontSize: '7px',
+              color: '#cbd5e1',
+            })
+            .setOrigin(0.5);
+        }
+      }
+
+      new Phaser.Game({
+        type: Phaser.AUTO,
+        parent: document.body,
+        width: 760,
+        height: 600,
+        backgroundColor: '#071f25',
+        pixelArt: true,
+        roundPixels: true,
+        scale: {
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        scene: [AssetPreviewScene],
+      });
+    </script>
+  </body>
+</html>

@@ -33,6 +33,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private invulnerableUntil = 0;
   private respawning = false;
   private dead = false;
+  private lastJumpWasDouble = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number, options: PlayerOptions) {
     super(scene, x, y, `${playerAnimationKey(options.variant, 'idle')}-0`);
@@ -50,7 +51,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(12, 20);
-    body.setOffset(10, 8);
+    body.setOffset(26, 34);
 
     this.attackHitbox = scene.add.zone(x, y - 12, 26, 18);
     scene.physics.add.existing(this.attackHitbox);
@@ -169,6 +170,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     this.setVelocityY(-this.jumpSpeed);
+    this.lastJumpWasDouble = canDoubleJump;
     this.jumpsUsed = grounded || canCoyoteJump ? 1 : this.jumpsUsed + 1;
     this.lastJumpPressedAt = -Infinity;
   }
@@ -227,12 +229,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.clearTint();
 
     if (!body.blocked.down && body.velocity.y < 0) {
-      this.playState('jump');
+      this.playState(this.lastJumpWasDouble ? 'doubleJump' : 'jump');
     } else if (!body.blocked.down && body.velocity.y > 12) {
+      this.lastJumpWasDouble = false;
       this.playState('fall');
     } else if (Math.abs(body.velocity.x) > 6) {
+      this.lastJumpWasDouble = false;
       this.playState('run');
     } else {
+      this.lastJumpWasDouble = false;
       this.playState('idle');
     }
   }
@@ -263,6 +268,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(0, 0);
     this.setAttackHitboxEnabled(false);
     this.jumpsUsed = 0;
+    this.lastJumpWasDouble = false;
     this.lastJumpPressedAt = -Infinity;
 
     if (restoreHealth) {

@@ -1,6 +1,6 @@
 export type PlayerVariant = 'male' | 'female';
 
-export type PlayerAnimationState = 'idle' | 'run' | 'jump' | 'fall' | 'attack' | 'hit' | 'death';
+export type PlayerAnimationState = 'idle' | 'run' | 'jump' | 'doubleJump' | 'fall' | 'attack' | 'hit' | 'death';
 
 export type PlayerDamageSource = 'enemy' | 'trap';
 
