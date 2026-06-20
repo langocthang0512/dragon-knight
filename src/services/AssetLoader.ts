@@ -2,32 +2,32 @@ import Phaser from 'phaser';
 import { PlayerAnimationState, PlayerVariant } from '../entities/player/playerTypes';
 
 export const PlaceholderAssets = {
-  player: 'placeholder-player',
-  enemy: 'placeholder-enemy',
-  dragonSmall: 'dragon-small-v2',
-  dragonFlying: 'dragon-flying-v2',
-  dragonHeavy: 'dragon-heavy-v2',
-  dragonEgg: 'dragon-egg-v2',
-  coin: 'coin-dragon-crest-v2',
-  coinHud: 'coin-hud-v2',
-  tile: 'moss-stone-tile-v2',
-  trap: 'spike-trap-v2',
-  bonfire: 'bonfire-checkpoint-v2',
-  finishGate: 'finish-gate-v2',
-  slash: 'vfx-slash-v2',
-  dust: 'vfx-dust-v2',
-  jumpBurst: 'vfx-jump-burst-v2',
-  coinPickup: 'vfx-coin-pickup-v2',
-  damage: 'vfx-damage-v2',
-  checkpointBurst: 'vfx-checkpoint-burst-v2',
-  deathBurst: 'vfx-death-burst-v2',
-  uiPanel: 'ui-panel-stone-v2',
-  uiButtonStone: 'ui-button-stone-v2',
-  uiButtonWood: 'ui-button-wood-v2',
-  uiIconButton: 'ui-icon-button-v2',
-  heartFull: 'heart-full-v2',
-  heartEmpty: 'heart-empty-v2',
-  selectionFrame: 'selection-frame-v2',
+  player: 'candidate-a-player',
+  enemy: 'candidate-a-enemy',
+  dragonSmall: 'candidate-a-dragon-small',
+  dragonFlying: 'candidate-a-dragon-flying',
+  dragonHeavy: 'candidate-a-dragon-heavy',
+  dragonEgg: 'candidate-a-dragon-egg',
+  coin: 'candidate-a-coin',
+  coinHud: 'candidate-a-coin-hud',
+  tile: 'candidate-a-moss-stone-tile',
+  trap: 'candidate-a-spike-trap',
+  bonfire: 'candidate-a-bonfire-checkpoint',
+  finishGate: 'candidate-a-finish-gate',
+  slash: 'candidate-a-vfx-slash',
+  dust: 'candidate-a-vfx-dust',
+  jumpBurst: 'candidate-a-vfx-jump-burst',
+  coinPickup: 'candidate-a-vfx-coin-pickup',
+  damage: 'candidate-a-vfx-damage',
+  checkpointBurst: 'candidate-a-vfx-checkpoint-burst',
+  deathBurst: 'candidate-a-vfx-death-burst',
+  uiPanel: 'candidate-a-ui-panel-stone',
+  uiButtonStone: 'candidate-a-ui-button-stone',
+  uiButtonWood: 'candidate-a-ui-button-wood',
+  uiIconButton: 'candidate-a-ui-icon-button',
+  heartFull: 'candidate-a-heart-full',
+  heartEmpty: 'candidate-a-heart-empty',
+  selectionFrame: 'candidate-a-selection-frame',
 } as const;
 
 const playerStates: PlayerAnimationState[] = [
@@ -44,71 +44,69 @@ const playerStates: PlayerAnimationState[] = [
 const stateFrameCounts: Record<PlayerAnimationState, number> = {
   idle: 4,
   run: 6,
-  jump: 2,
-  doubleJump: 3,
-  fall: 2,
-  attack: 5,
+  jump: 1,
+  doubleJump: 1,
+  fall: 1,
+  attack: 4,
   hit: 2,
   death: 3,
 };
 
-const PLAYER_W = 64;
-const PLAYER_H = 56;
+const PLAYER_W = 48;
+const PLAYER_H = 48;
 
 const colors = {
   ink: 0x050509,
-  outline: 0x111018,
-  shadow: 0x17131b,
-  armorDeep: 0x151b24,
-  armor: 0x243243,
-  armorBlue: 0x35506b,
-  armorLight: 0x9fb1b8,
-  leatherDark: 0x3a1d15,
-  leather: 0x7b3b1f,
-  boot: 0x9b4d21,
-  scarfDeep: 0x6e1517,
-  scarf: 0xb52122,
-  scarfHi: 0xf04b24,
-  goldDark: 0x8c4b12,
-  gold: 0xd59a26,
-  goldLight: 0xffdf57,
-  skinDark: 0xa85f43,
-  skin: 0xefb489,
-  skinLight: 0xffd5a2,
-  eye: 0x11937b,
-  maleHairDark: 0x17100e,
-  maleHair: 0x2a1b17,
-  femaleHairDark: 0x7d1b22,
-  femaleHair: 0xd33a2c,
-  femaleHairHi: 0xf06f3d,
-  stoneInk: 0x16282c,
-  stoneDark: 0x27434a,
-  stone: 0x43676b,
-  stoneLight: 0x90a98f,
-  mossDark: 0x255c35,
-  moss: 0x69a744,
-  mossLight: 0xb2d85a,
-  fireRed: 0xd91f19,
-  fireOrange: 0xff6b1a,
-  fireYellow: 0xffcf3d,
-  fireWhite: 0xfff2b8,
-  dragonRedDeep: 0x681418,
-  dragonRedDark: 0x9f1b1d,
-  dragonRed: 0xe72b1f,
-  dragonOrange: 0xff6720,
-  dragonBelly: 0xf2bf6a,
-  dragonPurple: 0x663064,
-  dragonGreenDark: 0x075145,
-  dragonGreen: 0x0c8468,
-  dragonGreenHi: 0x5dc56e,
-  metalBlue: 0x91d4f1,
-  metalWhite: 0xf8fbff,
-  uiBlueDark: 0x384c67,
-  uiBlue: 0x8ba7b9,
-  uiBlueHi: 0xc7d6de,
-  uiWoodDark: 0x71411f,
-  uiWood: 0xbe7a3d,
-  uiWoodHi: 0xe0ae72,
+  armor0: 0x111722,
+  armor1: 0x1d2a38,
+  armor2: 0x314a60,
+  armor3: 0x6f8792,
+  armor4: 0xb4c0bd,
+  red0: 0x611216,
+  red1: 0x9d1c1e,
+  red2: 0xd83a24,
+  red3: 0xff7430,
+  gold0: 0x8a4d17,
+  gold1: 0xd69724,
+  gold2: 0xffde5a,
+  skin0: 0x9c5b3d,
+  skin1: 0xe7aa7c,
+  skin2: 0xffd09b,
+  eye: 0x0c9d82,
+  hair0: 0x140f0d,
+  hair1: 0x2c1b15,
+  hair2: 0x4b3023,
+  fHair0: 0x751a21,
+  fHair1: 0xc4332a,
+  fHair2: 0xef6b3a,
+  leather0: 0x321912,
+  leather1: 0x71401f,
+  boot: 0x8f461e,
+  stone0: 0x15282d,
+  stone1: 0x29484f,
+  stone2: 0x456b6e,
+  stone3: 0x91aa94,
+  moss0: 0x245c32,
+  moss1: 0x62a141,
+  moss2: 0xa9cf58,
+  fire0: 0xc71f19,
+  fire1: 0xff6720,
+  fire2: 0xffcb3d,
+  fire3: 0xfff0b0,
+  dragon0: 0x651519,
+  dragon1: 0xa91d1f,
+  dragon2: 0xe33122,
+  dragon3: 0xff6b20,
+  belly: 0xf0bf68,
+  green0: 0x053f38,
+  green1: 0x0a7f67,
+  green2: 0x59bc68,
+  purple: 0x63315f,
+  metal0: 0x82c7e8,
+  metal1: 0xeef9ff,
+  uiBlue0: 0x354b63,
+  uiBlue1: 0x8ba9bb,
+  uiBlue2: 0xc8d8de,
 };
 
 export function playerAnimationKey(variant: PlayerVariant, state: PlayerAnimationState) {
@@ -166,7 +164,7 @@ export class AssetLoader {
         this.scene.anims.create({
           key,
           frames: Array.from({ length: stateFrameCounts[state] }, (_, frame) => ({ key: `${key}-${frame}` })),
-          frameRate: state === 'run' ? 12 : state === 'attack' ? 18 : state === 'death' ? 4 : 7,
+          frameRate: state === 'run' ? 12 : state === 'attack' ? 16 : state === 'death' ? 4 : 6,
           repeat: state === 'idle' || state === 'run' ? -1 : 0,
         });
       }
@@ -184,8 +182,8 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    const idleBob = state === 'idle' && frame % 2 === 1 ? 1 : 0;
-    const run = [-3, -1, 2, 3, 1, -2][frame] ?? 0;
+    const bob = state === 'idle' && frame % 2 === 1 ? 1 : 0;
+    const run = [-2, -1, 1, 2, 1, -1][frame] ?? 0;
     const airborne = state === 'jump' || state === 'doubleJump' || state === 'fall';
 
     if (state === 'death') {
@@ -195,178 +193,165 @@ export class AssetLoader {
       return;
     }
 
-    this.drawCape(g, state, frame, idleBob);
-    this.drawKnightBody(g, state, run, idleBob, airborne);
-    this.drawKnightHead(g, variant, state, frame, idleBob);
+    this.drawCandidateCape(g, state, frame, bob);
+    this.drawCandidateBody(g, state, run, bob, airborne);
+    this.drawCandidateHead(g, variant, state, frame, bob);
 
     if (state === 'attack') {
-      this.drawHeldSwordAndSlash(g, frame);
+      this.drawCandidateSword(g, frame);
     } else {
-      this.drawSheathedSword(g, idleBob);
+      this.drawCandidateSheathedSword(g, bob);
     }
 
     if (state === 'hit') {
-      this.r(g, 14, 8, 28, 34, 0xfff1f2, 0.55);
-      this.r(g, 9, 15, 4, 3, 0xff2d2d);
-      this.r(g, 46, 26, 4, 3, 0xff2d2d);
+      this.r(g, 13, 8, 21, 30, 0xfff1f2, 0.48);
+      this.r(g, 8, 14, 4, 3, 0xff2d2d);
+      this.r(g, 35, 24, 4, 3, 0xff2d2d);
     }
 
     if (state === 'doubleJump') {
-      this.r(g, 19, 45, 5, 2, colors.fireYellow, 0.9);
-      this.r(g, 31, 46, 8, 2, colors.fireOrange, 0.85);
-      this.r(g, 26, 49, 4, 2, colors.fireWhite, 0.85);
+      this.r(g, 15, 43, 5, 2, colors.fire2);
+      this.r(g, 27, 43, 6, 2, colors.fire1);
+      this.r(g, 22, 45, 3, 2, colors.fire3);
     }
 
     g.generateTexture(key, PLAYER_W, PLAYER_H);
     g.destroy();
   }
 
-  private drawCape(g: Phaser.GameObjects.Graphics, state: PlayerAnimationState, frame: number, idleBob: number) {
-    const y = 20 + idleBob;
-    const wind = state === 'run' ? [-1, 0, 2, 3, 1, 0][frame] : state === 'fall' ? -2 : 0;
-    this.r(g, 4, y + 1, 23, 10, colors.ink);
-    this.r(g, 2, y + 9 + wind, 22, 11, colors.ink);
-    this.r(g, 1, y + 19 + wind, 14, 6, colors.ink);
-    this.r(g, 6, y + 2, 20, 8, colors.scarfDeep);
-    this.r(g, 4, y + 10 + wind, 18, 9, colors.scarf);
-    this.r(g, 2, y + 19 + wind, 12, 4, colors.scarfDeep);
-    this.r(g, 8, y + 4, 11, 2, colors.scarfHi);
-    this.r(g, 6, y + 12 + wind, 10, 2, colors.scarfHi);
-    this.r(g, 18, y + 10 + wind, 3, 7, colors.shadow);
+  private drawCandidateCape(g: Phaser.GameObjects.Graphics, state: PlayerAnimationState, frame: number, bob: number) {
+    const y = 18 + bob;
+    const wind = state === 'run' ? [-1, 0, 1, 2, 1, 0][frame] : state === 'fall' ? -1 : 0;
+    this.r(g, 5, y + 2, 17, 8, colors.ink);
+    this.r(g, 3, y + 9 + wind, 15, 9, colors.ink);
+    this.r(g, 6, y + 3, 15, 6, colors.red0);
+    this.r(g, 4, y + 10 + wind, 12, 7, colors.red1);
+    this.r(g, 7, y + 5, 7, 2, colors.red2);
+    this.r(g, 5, y + 13 + wind, 7, 2, colors.red2);
   }
 
-  private drawKnightBody(
+  private drawCandidateBody(
     g: Phaser.GameObjects.Graphics,
     state: PlayerAnimationState,
     run: number,
-    idleBob: number,
+    bob: number,
     airborne: boolean,
   ) {
-    const y = 19 + idleBob + (state === 'fall' ? 1 : 0);
-    const legA = airborne ? -2 : run;
-    const legB = airborne ? 2 : -run;
-    const attackArm = state === 'attack' ? -4 : 0;
+    const y = 18 + bob + (state === 'fall' ? 1 : 0);
+    const legA = airborne ? -1 : run;
+    const legB = airborne ? 1 : -run;
+    const armLift = state === 'attack' ? -3 : 0;
 
-    this.r(g, 22, y - 2, 22, 22, colors.ink);
-    this.r(g, 18, y + 1, 8, 14, colors.ink);
-    this.r(g, 42, y + 1 + attackArm, 8, 15, colors.ink);
-    this.r(g, 22 + legA, y + 19, 9, 17, colors.ink);
-    this.r(g, 36 + legB, y + 19, 9, 17, colors.ink);
+    this.r(g, 16, y, 17, 19, colors.ink);
+    this.r(g, 13, y + 3, 6, 11, colors.ink);
+    this.r(g, 31, y + 3 + armLift, 6, 12, colors.ink);
+    this.r(g, 16 + legA, y + 18, 7, 16, colors.ink);
+    this.r(g, 27 + legB, y + 18, 7, 16, colors.ink);
 
-    this.r(g, 24, y, 18, 17, colors.armorDeep);
-    this.r(g, 25, y + 2, 15, 6, colors.armorBlue);
-    this.r(g, 26, y + 9, 14, 6, colors.armor);
-    this.r(g, 27, y + 2, 8, 2, colors.armorLight);
-    this.r(g, 39, y + 5, 2, 6, colors.armorLight);
-    this.r(g, 29, y + 16, 10, 3, colors.leatherDark);
-    this.r(g, 23, y + 1, 5, 7, colors.goldDark);
-    this.r(g, 42, y + 1 + attackArm, 5, 7, colors.goldDark);
-    this.r(g, 24, y + 2, 3, 3, colors.goldLight);
-    this.r(g, 43, y + 2 + attackArm, 3, 3, colors.goldLight);
+    this.r(g, 18, y + 1, 13, 15, colors.armor0);
+    this.r(g, 19, y + 2, 10, 5, colors.armor2);
+    this.r(g, 20, y + 8, 9, 5, colors.armor1);
+    this.r(g, 20, y + 2, 5, 2, colors.armor4);
+    this.r(g, 17, y + 2, 4, 6, colors.gold0);
+    this.r(g, 31, y + 3 + armLift, 4, 6, colors.gold0);
+    this.r(g, 18, y + 3, 2, 2, colors.gold2);
+    this.r(g, 32, y + 4 + armLift, 2, 2, colors.gold2);
+    this.r(g, 19, y + 14, 12, 3, colors.leather1);
+    this.r(g, 23, y + 13, 4, 4, colors.gold2);
+    this.r(g, 23, y + 17, 5, 9, colors.red0);
+    this.r(g, 24, y + 18, 3, 5, colors.red2);
+    this.r(g, 24, y + 24, 2, 3, colors.gold1);
 
-    this.r(g, 27, y + 15, 16, 4, colors.leather);
-    this.r(g, 31, y + 14, 6, 5, colors.goldLight);
-    this.r(g, 32, y + 15, 3, 2, colors.goldDark);
-    this.r(g, 31, y + 19, 7, 11, colors.scarfDeep);
-    this.r(g, 33, y + 20, 4, 6, colors.scarf);
-    this.r(g, 34, y + 27, 2, 3, colors.goldLight);
+    this.r(g, 14, y + 5, 4, 9, colors.armor1);
+    this.r(g, 32, y + 5 + armLift, 4, 9, colors.armor1);
+    this.r(g, 13, y + 14, 4, 3, colors.skin1);
+    this.r(g, 34, y + 14 + armLift, 4, 3, colors.skin1);
 
-    this.r(g, 19, y + 4, 5, 12, colors.armor);
-    this.r(g, 44, y + 4 + attackArm, 5, 12, colors.armor);
-    this.r(g, 18, y + 15, 5, 4, colors.skin);
-    this.r(g, 46, y + 15 + attackArm, 5, 4, colors.skin);
-
-    this.r(g, 23 + legA, y + 21, 6, 12, colors.armorDeep);
-    this.r(g, 37 + legB, y + 21, 6, 12, colors.armorDeep);
-    this.r(g, 25 + legA, y + 23, 3, 6, colors.armorBlue);
-    this.r(g, 39 + legB, y + 23, 3, 6, colors.armorBlue);
-    this.r(g, 20 + legA, y + 34, 12, 4, colors.ink);
-    this.r(g, 34 + legB, y + 34, 12, 4, colors.ink);
-    this.r(g, 21 + legA, y + 34, 10, 3, colors.boot);
-    this.r(g, 35 + legB, y + 34, 10, 3, colors.boot);
-    this.r(g, 26 + legA, y + 29, 3, 3, colors.gold);
-    this.r(g, 40 + legB, y + 29, 3, 3, colors.gold);
+    this.r(g, 17 + legA, y + 20, 5, 11, colors.armor0);
+    this.r(g, 28 + legB, y + 20, 5, 11, colors.armor0);
+    this.r(g, 18 + legA, y + 22, 2, 5, colors.armor2);
+    this.r(g, 29 + legB, y + 22, 2, 5, colors.armor2);
+    this.r(g, 15 + legA, y + 32, 10, 4, colors.ink);
+    this.r(g, 26 + legB, y + 32, 10, 4, colors.ink);
+    this.r(g, 16 + legA, y + 32, 8, 3, colors.boot);
+    this.r(g, 27 + legB, y + 32, 8, 3, colors.boot);
+    this.r(g, 20 + legA, y + 28, 2, 2, colors.gold1);
+    this.r(g, 31 + legB, y + 28, 2, 2, colors.gold1);
   }
 
-  private drawKnightHead(
+  private drawCandidateHead(
     g: Phaser.GameObjects.Graphics,
     variant: PlayerVariant,
     state: PlayerAnimationState,
     frame: number,
-    idleBob: number,
+    bob: number,
   ) {
-    const y = 8 + idleBob + (state === 'jump' ? -1 : 0);
-    this.r(g, 23, y + 2, 20, 16, colors.ink);
-    this.r(g, 25, y + 4, 16, 12, colors.skin);
-    this.r(g, 26, y + 5, 6, 3, colors.skinLight);
-    this.r(g, 38, y + 9, 3, 3, colors.eye);
-    this.r(g, 30, y + 14, 6, 1, colors.skinDark);
-    this.r(g, 25, y + 16, 17, 4, colors.scarfDeep);
-    this.r(g, 27, y + 16, 12, 2, colors.scarf);
+    const y = 5 + bob + (state === 'jump' ? -1 : 0);
+    this.r(g, 17, y + 4, 15, 13, colors.ink);
+    this.r(g, 18, y + 6, 12, 9, colors.skin1);
+    this.r(g, 19, y + 7, 5, 2, colors.skin2);
+    this.r(g, 29, y + 10, 2, 2, colors.eye);
+    this.r(g, 23, y + 14, 5, 1, colors.skin0);
+    this.r(g, 18, y + 16, 14, 4, colors.red0);
+    this.r(g, 20, y + 16, 9, 2, colors.red1);
 
     if (variant === 'male') {
-      this.r(g, 19, y, 26, 8, colors.ink);
-      this.r(g, 22, y - 3, 7, 5, colors.ink);
-      this.r(g, 30, y - 4, 5, 5, colors.ink);
-      this.r(g, 39, y + 1, 5, 8, colors.ink);
-      this.r(g, 20, y + 1, 24, 6, colors.maleHairDark);
-      this.r(g, 23, y - 2, 5, 4, colors.maleHair);
-      this.r(g, 31, y - 3, 4, 4, colors.maleHair);
-      this.r(g, 39, y + 3, 4, 6, colors.maleHair);
-      this.r(g, 25, y, 8, 2, 0x4a3024);
+      this.r(g, 13, y + 2, 22, 7, colors.ink);
+      this.r(g, 16, y - 1, 6, 4, colors.ink);
+      this.r(g, 24, y - 2, 5, 4, colors.ink);
+      this.r(g, 32, y + 3, 4, 6, colors.ink);
+      this.r(g, 14, y + 3, 20, 5, colors.hair0);
+      this.r(g, 17, y, 4, 3, colors.hair1);
+      this.r(g, 25, y - 1, 3, 3, colors.hair1);
+      this.r(g, 31, y + 4, 3, 5, colors.hair1);
+      this.r(g, 19, y + 2, 6, 1, colors.hair2);
       return;
     }
 
-    const sway = state === 'run' ? (frame % 2 === 0 ? 1 : -1) : state === 'fall' ? -2 : 0;
-    this.r(g, 20, y, 26, 8, colors.ink);
-    this.r(g, 13 + sway, y + 5, 12, 21, colors.ink);
-    this.r(g, 8 + sway, y + 13, 10, 11, colors.ink);
-    this.r(g, 21, y + 1, 23, 6, colors.femaleHairDark);
-    this.r(g, 14 + sway, y + 6, 10, 19, colors.femaleHairDark);
-    this.r(g, 9 + sway, y + 14, 9, 8, colors.femaleHair);
-    this.r(g, 24, y + 2, 13, 3, colors.femaleHair);
-    this.r(g, 16 + sway, y + 8, 5, 10, colors.femaleHairHi);
-    this.r(g, 13 + sway, y + 6, 4, 3, colors.goldLight);
+    const sway = state === 'run' ? (frame % 2 === 0 ? 1 : -1) : 0;
+    this.r(g, 14, y + 2, 22, 7, colors.ink);
+    this.r(g, 10 + sway, y + 8, 9, 18, colors.ink);
+    this.r(g, 6 + sway, y + 15, 8, 9, colors.ink);
+    this.r(g, 15, y + 3, 19, 5, colors.fHair0);
+    this.r(g, 11 + sway, y + 9, 7, 16, colors.fHair0);
+    this.r(g, 7 + sway, y + 16, 7, 7, colors.fHair1);
+    this.r(g, 18, y + 4, 10, 2, colors.fHair1);
+    this.r(g, 13 + sway, y + 11, 4, 8, colors.fHair2);
+    this.r(g, 11 + sway, y + 9, 3, 2, colors.gold2);
   }
 
-  private drawSheathedSword(g: Phaser.GameObjects.Graphics, idleBob: number) {
-    this.r(g, 42, 21 + idleBob, 5, 19, colors.ink);
-    this.r(g, 44, 22 + idleBob, 2, 15, colors.metalBlue);
-    this.r(g, 43, 23 + idleBob, 1, 12, colors.metalWhite);
-    this.r(g, 40, 30 + idleBob, 8, 3, colors.gold);
-    this.r(g, 46, 39 + idleBob, 3, 4, colors.goldLight);
+  private drawCandidateSheathedSword(g: Phaser.GameObjects.Graphics, bob: number) {
+    this.r(g, 32, 21 + bob, 4, 16, colors.ink);
+    this.r(g, 34, 22 + bob, 1, 13, colors.metal0);
+    this.r(g, 33, 23 + bob, 1, 8, colors.metal1);
+    this.r(g, 31, 29 + bob, 6, 2, colors.gold1);
   }
 
-  private drawHeldSwordAndSlash(g: Phaser.GameObjects.Graphics, frame: number) {
-    const reach = frame * 5;
-    const y = 22 - frame;
-    this.r(g, 45, y, 16 + reach, 6, colors.ink);
-    this.r(g, 60 + reach, y - 2, 4, 9, colors.ink);
-    this.r(g, 47, y + 1, 13 + reach, 3, colors.metalBlue);
-    this.r(g, 48, y, 11 + reach, 2, colors.metalWhite);
-    this.r(g, 42, y - 1, 7, 8, colors.goldLight);
-    this.r(g, 42, y + 2, 7, 3, colors.goldDark);
-    this.r(g, 40, y + 3, 4, 5, colors.leather);
-    this.r(g, 39, y + 7, 4, 4, colors.ink);
-    this.r(g, 40, y + 8, 2, 2, colors.fireRed);
-    this.r(g, 43, 10 - frame, 30 + reach, 3, colors.fireWhite, 0.9);
-    this.r(g, 48, 14 - frame, 29 + reach, 3, colors.fireYellow, 0.8);
-    this.r(g, 54, 18 - frame, 22 + reach, 3, colors.fireOrange, 0.62);
-    this.r(g, 66 + reach, 12 - frame, 5, 2, colors.fireWhite, 0.8);
+  private drawCandidateSword(g: Phaser.GameObjects.Graphics, frame: number) {
+    const x = 34 + frame * 2;
+    const y = 23 - frame;
+    this.r(g, x, y, 12, 5, colors.ink);
+    this.r(g, x + 9, y - 3, 5, 6, colors.ink);
+    this.r(g, x + 1, y + 1, 10, 2, colors.metal0);
+    this.r(g, x + 2, y, 8, 1, colors.metal1);
+    this.r(g, x - 3, y - 1, 6, 7, colors.gold2);
+    this.r(g, x - 4, y + 6, 3, 4, colors.ink);
+    this.r(g, x - 3, y + 7, 1, 1, colors.fire0);
+    this.r(g, 32, 12 - frame, 16, 2, colors.fire3, 0.9);
+    this.r(g, 35, 15 - frame, 14, 2, colors.fire2, 0.75);
+    this.r(g, 38, 18 - frame, 10, 2, colors.fire1, 0.55);
   }
 
   private drawFallenKnight(g: Phaser.GameObjects.Graphics, variant: PlayerVariant, frame: number) {
     const y = 35 + frame;
-    this.r(g, 9, y + 2, 36, 12, colors.ink);
-    this.r(g, 43, y - 2, 13, 9, colors.ink);
-    this.r(g, 11, y + 3, 30, 9, colors.armorDeep);
-    this.r(g, 15, y + 5, 13, 3, colors.armorBlue);
-    this.r(g, 3, y + 4, 20, 5, colors.scarfDeep);
-    this.r(g, 5, y + 5, 12, 2, colors.scarf);
-    this.r(g, 45, y, 9, 6, colors.skin);
-    this.r(g, 41, y - 3, 15, 4, variant === 'female' ? colors.femaleHair : colors.maleHair);
-    this.r(g, 30, y + 5, 7, 3, colors.goldLight);
-    this.r(g, 51, y + 5, 4, 1, colors.scarf);
+    this.r(g, 8, y, 28, 9, colors.ink);
+    this.r(g, 32, y - 3, 10, 7, colors.ink);
+    this.r(g, 10, y + 1, 23, 6, colors.armor0);
+    this.r(g, 12, y + 3, 10, 2, colors.armor2);
+    this.r(g, 4, y + 2, 15, 4, colors.red0);
+    this.r(g, 34, y - 2, 7, 5, colors.skin1);
+    this.r(g, 31, y - 4, 11, 3, variant === 'female' ? colors.fHair1 : colors.hair1);
+    this.r(g, 24, y + 3, 5, 2, colors.gold2);
   }
 
   private createStoneTileTexture() {
@@ -376,22 +361,20 @@ export class AssetLoader {
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
     this.r(g, 0, 0, 48, 32, colors.ink);
-    this.r(g, 0, 0, 48, 8, colors.mossDark);
-    this.r(g, 1, 0, 46, 5, colors.moss);
-    this.r(g, 5, 0, 10, 2, colors.mossLight);
-    this.r(g, 24, 1, 13, 2, colors.mossLight);
-    this.r(g, 3, 6, 42, 24, colors.stone);
-    this.r(g, 3, 22, 42, 8, colors.stoneDark);
-    this.r(g, 5, 8, 15, 3, colors.stoneLight);
-    this.r(g, 26, 9, 16, 3, colors.stoneLight);
-    this.r(g, 4, 18, 10, 2, colors.stoneInk);
-    this.r(g, 17, 13, 3, 10, colors.stoneInk);
-    this.r(g, 32, 15, 3, 8, colors.stoneInk);
-    this.r(g, 25, 24, 12, 2, colors.stoneInk);
-    this.r(g, 8, 12, 4, 2, colors.mossDark);
-    this.r(g, 39, 5, 3, 8, colors.mossDark);
-    this.r(g, 14, 4, 3, 5, colors.mossDark);
-    this.r(g, 22, 18, 4, 2, colors.goldDark, 0.35);
+    this.r(g, 0, 0, 48, 8, colors.moss0);
+    this.r(g, 1, 0, 46, 5, colors.moss1);
+    this.r(g, 5, 0, 9, 2, colors.moss2);
+    this.r(g, 25, 1, 11, 2, colors.moss2);
+    this.r(g, 3, 7, 42, 23, colors.stone1);
+    this.r(g, 3, 22, 42, 8, colors.stone0);
+    this.r(g, 5, 9, 13, 3, colors.stone3);
+    this.r(g, 25, 10, 14, 3, colors.stone2);
+    this.r(g, 8, 15, 2, 10, colors.stone0);
+    this.r(g, 20, 13, 3, 13, colors.stone0);
+    this.r(g, 34, 16, 2, 9, colors.stone0);
+    this.r(g, 27, 24, 9, 2, colors.stone2);
+    this.r(g, 39, 5, 3, 8, colors.moss0);
+    this.r(g, 13, 4, 3, 5, colors.moss0);
     g.generateTexture(PlaceholderAssets.tile, 48, 32);
     g.destroy();
   }
@@ -402,21 +385,17 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    const o = size === 20 ? 1 : 2;
-    this.r(g, o + 4, 1, 10, 2, colors.ink);
-    this.r(g, o + 2, 3, 14, 14, colors.ink);
-    this.r(g, o + 4, 17, 10, 2, colors.ink);
-    this.r(g, o + 4, 2, 10, 2, colors.goldDark);
-    this.r(g, o + 3, 4, 12, 13, colors.gold);
-    this.r(g, o + 5, 4, 8, 2, colors.goldLight);
-    this.r(g, o + 4, 7, 3, 5, colors.goldLight);
-    this.r(g, o + 12, 6, 2, 8, colors.goldDark);
-    this.r(g, o + 7, 7, 6, 1, colors.goldDark);
-    this.r(g, o + 8, 8, 5, 1, colors.goldDark);
-    this.r(g, o + 7, 9, 3, 3, colors.goldDark);
-    this.r(g, o + 10, 12, 4, 1, colors.goldDark);
-    this.r(g, o + 6, 5, 2, 1, colors.fireWhite);
-    this.r(g, o + 9, 14, 3, 1, colors.goldLight);
+    const o = Math.floor((size - 20) / 2);
+    this.r(g, o + 4, 1, 12, 2, colors.ink);
+    this.r(g, o + 2, 3, 16, 14, colors.ink);
+    this.r(g, o + 4, 17, 12, 2, colors.ink);
+    this.r(g, o + 4, 2, 12, 2, colors.gold0);
+    this.r(g, o + 3, 4, 14, 13, colors.gold1);
+    this.r(g, o + 5, 4, 9, 2, colors.gold2);
+    this.r(g, o + 5, 7, 10, 8, colors.gold0);
+    this.r(g, o + 8, 7, 4, 4, colors.fire3);
+    this.r(g, o + 9, 8, 2, 2, colors.fire0);
+    this.r(g, o + 6, 5, 2, 1, colors.fire3);
     g.generateTexture(key, size, size);
     g.destroy();
   }
@@ -426,54 +405,45 @@ export class AssetLoader {
       return;
     }
 
-    const width = type === 'heavy' ? 82 : type === 'flying' ? 78 : 62;
-    const height = type === 'heavy' ? 52 : type === 'flying' ? 50 : 40;
+    const width = type === 'heavy' ? 76 : type === 'flying' ? 56 : 48;
+    const height = type === 'heavy' ? 52 : type === 'flying' ? 36 : 32;
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    const body = type === 'heavy' ? colors.dragonGreen : colors.dragonRed;
-    const dark = type === 'heavy' ? colors.dragonGreenDark : colors.dragonRedDark;
-    const deep = type === 'heavy' ? 0x032f2d : colors.dragonRedDeep;
-    const wing = type === 'heavy' ? 0x0f6658 : type === 'flying' ? 0xc2471d : colors.dragonPurple;
+    const body = type === 'heavy' ? colors.green1 : colors.dragon2;
+    const dark = type === 'heavy' ? colors.green0 : colors.dragon1;
+    const wing = type === 'heavy' ? colors.green0 : type === 'flying' ? colors.dragon3 : colors.purple;
+    const bodyY = type === 'flying' ? 15 : type === 'heavy' ? 23 : 17;
+    const headX = width - (type === 'heavy' ? 27 : type === 'flying' ? 23 : 20);
 
-    this.r(g, 5, 20, width - 29, 15, colors.ink);
-    this.r(g, width - 28, 12, 22, 17, colors.ink);
-    this.r(g, 0, 26, 12, 6, colors.ink);
-    this.r(g, width - 15, 30, 12, 5, colors.ink);
-    this.r(g, width - 7, 32, 5, 4, colors.ink);
-    this.r(g, 14, 34, 8, 8, colors.ink);
-    this.r(g, 34, 34, 8, 8, colors.ink);
-    if (type !== 'small') {
-      this.r(g, 20, 6, 28, 17, colors.ink);
-      this.r(g, 33, 2, 10, 11, colors.ink);
-    }
+    this.r(g, 5, bodyY, width - 28, 11, colors.ink);
+    this.r(g, headX, bodyY - 7, 18, 14, colors.ink);
+    this.r(g, 0, bodyY + 5, 10, 5, colors.ink);
+    this.r(g, width - 13, bodyY + 9, 9, 4, colors.ink);
+    this.r(g, 11, bodyY + 11, 6, 7, colors.ink);
+    this.r(g, 28, bodyY + 11, 6, 7, colors.ink);
+    this.r(g, 7, bodyY + 1, width - 31, 9, dark);
+    this.r(g, 10, bodyY, width - 36, 7, body);
+    this.r(g, headX + 2, bodyY - 6, 14, 10, dark);
+    this.r(g, headX + 4, bodyY - 7, 10, 7, body);
+    this.r(g, 13, bodyY + 8, width - 35, 4, colors.belly);
+    this.r(g, 15, bodyY + 2, 4, 3, colors.dragon3);
+    this.r(g, 24, bodyY + 3, 4, 3, type === 'heavy' ? colors.green2 : colors.dragon3);
+    this.r(g, headX + 5, bodyY - 11, 3, 6, colors.gold2);
+    this.r(g, headX + 11, bodyY - 12, 3, 7, colors.gold2);
+    this.r(g, headX + 7, bodyY - 2, 2, 2, colors.ink);
+    this.r(g, headX + 8, bodyY - 2, 1, 1, colors.fire3);
+    this.r(g, headX + 13, bodyY + 2, 5, 2, colors.ink);
 
-    this.r(g, 7, 21, width - 33, 13, deep);
-    this.r(g, 10, 20, width - 38, 10, body);
-    this.r(g, width - 26, 14, 18, 14, dark);
-    this.r(g, width - 23, 13, 14, 10, body);
-    this.r(g, width - 21, 23, 12, 3, colors.dragonBelly);
-    this.r(g, 15, 30, width - 39, 5, colors.dragonBelly);
-    this.r(g, 17, 23, 5, 4, colors.dragonOrange);
-    this.r(g, 27, 24, 5, 4, colors.dragonOrange);
-    this.r(g, 38, 23, 5, 4, type === 'heavy' ? colors.dragonGreenHi : colors.dragonOrange);
-    this.r(g, width - 20, 9, 4, 7, colors.goldLight);
-    this.r(g, width - 12, 7, 4, 8, colors.goldLight);
-    this.r(g, width - 27, 10, 3, 6, colors.gold);
-    this.r(g, width - 18, 18, 2, 3, colors.ink);
-    this.r(g, width - 17, 18, 1, 1, colors.fireWhite);
-    this.r(g, width - 10, 23, 6, 2, colors.ink);
-
-    this.r(g, 19, type === 'flying' ? 6 : 10, 22, 12, colors.ink);
-    this.r(g, 34, type === 'flying' ? 3 : 9, 20, 17, colors.ink);
-    this.r(g, 21, type === 'flying' ? 8 : 12, 19, 9, wing);
-    this.r(g, 36, type === 'flying' ? 5 : 11, 16, 12, wing);
-    this.r(g, 24, type === 'flying' ? 10 : 14, 11, 4, type === 'heavy' ? colors.dragonGreenHi : colors.dragonOrange);
-    this.r(g, 39, type === 'flying' ? 8 : 13, 9, 5, type === 'heavy' ? colors.mossLight : colors.dragonOrange);
-    this.r(g, 14, 38, 6, 3, colors.fireWhite);
-    this.r(g, 35, 38, 6, 3, colors.fireWhite);
+    this.r(g, 17, bodyY - 9, 18, 10, colors.ink);
+    this.r(g, 20, bodyY - 7, 13, 7, wing);
+    this.r(g, 23, bodyY - 5, 7, 3, type === 'heavy' ? colors.green2 : colors.dragon3);
+    this.r(g, 12, bodyY + 16, 4, 2, colors.fire3);
+    this.r(g, 29, bodyY + 16, 4, 2, colors.fire3);
 
     if (type === 'flying') {
-      this.r(g, width - 4, 30, 7, 5, colors.fireYellow);
-      this.r(g, width + 1, 31, 5, 3, colors.fireOrange);
+      this.r(g, 27, 3, 15, 12, colors.ink);
+      this.r(g, 30, 5, 10, 8, wing);
+      this.r(g, width - 4, bodyY + 8, 6, 4, colors.fire2);
+      this.r(g, width, bodyY + 9, 4, 3, colors.fire1);
     }
 
     g.generateTexture(key, width, height);
@@ -486,20 +456,19 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 9, 1, 12, 3, colors.ink);
-    this.r(g, 5, 4, 20, 23, colors.ink);
-    this.r(g, 7, 27, 16, 4, colors.ink);
-    this.r(g, 7, 5, 16, 22, colors.dragonRedDeep);
-    this.r(g, 9, 4, 13, 20, colors.dragonOrange);
-    this.r(g, 12, 4, 7, 4, colors.fireYellow);
-    this.r(g, 10, 10, 4, 4, colors.fireYellow);
-    this.r(g, 18, 15, 4, 5, colors.fireYellow);
-    this.r(g, 13, 5, 3, 1, colors.fireWhite);
-    this.r(g, 8, 13, 9, 2, colors.dragonRedDark);
-    this.r(g, 13, 14, 2, 9, colors.dragonRedDark);
-    this.r(g, 18, 8, 2, 8, colors.dragonRedDark);
-    this.r(g, 15, 23, 5, 2, colors.goldLight);
-    g.generateTexture(PlaceholderAssets.dragonEgg, 30, 32);
+    this.r(g, 7, 1, 10, 3, colors.ink);
+    this.r(g, 4, 4, 16, 23, colors.ink);
+    this.r(g, 6, 27, 12, 4, colors.ink);
+    this.r(g, 6, 5, 12, 22, colors.dragon0);
+    this.r(g, 8, 4, 10, 19, colors.fire1);
+    this.r(g, 10, 4, 6, 4, colors.fire2);
+    this.r(g, 8, 11, 4, 4, colors.fire2);
+    this.r(g, 15, 16, 3, 5, colors.fire2);
+    this.r(g, 11, 5, 2, 1, colors.fire3);
+    this.r(g, 7, 13, 8, 2, colors.dragon1);
+    this.r(g, 12, 14, 2, 9, colors.dragon1);
+    this.r(g, 16, 8, 1, 8, colors.dragon1);
+    g.generateTexture(PlaceholderAssets.dragonEgg, 24, 32);
     g.destroy();
   }
 
@@ -509,19 +478,18 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 0, 20, 54, 10, colors.ink);
-    this.r(g, 2, 22, 50, 7, colors.stoneDark);
-    this.r(g, 5, 22, 14, 3, colors.stoneLight);
-    this.r(g, 33, 22, 13, 3, colors.stone);
-    for (let x = 4; x <= 43; x += 10) {
-      this.r(g, x, 6, 8, 15, colors.ink);
-      this.r(g, x + 1, 3, 6, 5, colors.ink);
-      this.r(g, x + 3, 4, 3, 8, colors.fireWhite);
-      this.r(g, x + 2, 11, 5, 8, colors.dragonBelly);
-      this.r(g, x + 3, 16, 3, 4, colors.fireRed);
-      this.r(g, x + 5, 8, 2, 7, colors.goldDark);
+    this.r(g, 0, 17, 48, 7, colors.ink);
+    this.r(g, 2, 18, 44, 5, colors.stone0);
+    this.r(g, 5, 18, 12, 2, colors.stone3);
+    this.r(g, 29, 18, 11, 2, colors.stone2);
+    for (let x = 4; x <= 34; x += 10) {
+      this.r(g, x, 7, 7, 11, colors.ink);
+      this.r(g, x + 2, 3, 4, 5, colors.ink);
+      this.r(g, x + 3, 4, 2, 7, colors.fire3);
+      this.r(g, x + 2, 10, 4, 7, colors.belly);
+      this.r(g, x + 3, 15, 2, 3, colors.fire0);
     }
-    g.generateTexture(PlaceholderAssets.trap, 54, 30);
+    g.generateTexture(PlaceholderAssets.trap, 48, 24);
     g.destroy();
   }
 
@@ -531,25 +499,24 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 5, 38, 40, 9, colors.ink);
-    this.r(g, 12, 33, 27, 8, colors.ink);
-    this.r(g, 7, 39, 36, 6, colors.stoneDark);
-    this.r(g, 9, 36, 12, 5, colors.stoneLight);
-    this.r(g, 30, 35, 12, 6, colors.stone);
-    this.r(g, 15, 34, 22, 4, colors.leatherDark);
-    this.r(g, 23, 28, 4, 12, colors.leather);
-    this.r(g, 18, 8, 17, 26, colors.ink);
-    this.r(g, 13, 19, 24, 14, colors.ink);
-    this.r(g, 20, 9, 13, 24, colors.fireRed);
-    this.r(g, 15, 20, 20, 11, colors.fireRed);
-    this.r(g, 22, 11, 8, 21, colors.fireOrange);
-    this.r(g, 18, 23, 13, 7, colors.fireOrange);
-    this.r(g, 24, 19, 5, 12, colors.fireYellow);
-    this.r(g, 25, 24, 3, 6, colors.fireWhite);
-    this.r(g, 10, 13, 4, 10, colors.fireOrange);
-    this.r(g, 39, 11, 4, 9, colors.fireOrange);
-    this.r(g, 34, 5, 3, 7, colors.fireYellow);
-    g.generateTexture(PlaceholderAssets.bonfire, 50, 48);
+    this.r(g, 4, 31, 32, 7, colors.ink);
+    this.r(g, 10, 27, 21, 7, colors.ink);
+    this.r(g, 6, 32, 28, 5, colors.stone0);
+    this.r(g, 8, 29, 9, 4, colors.stone3);
+    this.r(g, 25, 29, 9, 4, colors.stone2);
+    this.r(g, 12, 28, 18, 3, colors.leather0);
+    this.r(g, 18, 23, 3, 9, colors.leather1);
+    this.r(g, 14, 7, 14, 22, colors.ink);
+    this.r(g, 10, 16, 20, 12, colors.ink);
+    this.r(g, 16, 8, 10, 20, colors.fire0);
+    this.r(g, 12, 18, 16, 9, colors.fire0);
+    this.r(g, 18, 10, 6, 18, colors.fire1);
+    this.r(g, 15, 20, 9, 6, colors.fire1);
+    this.r(g, 19, 17, 4, 10, colors.fire2);
+    this.r(g, 20, 22, 2, 5, colors.fire3);
+    this.r(g, 7, 11, 3, 7, colors.fire1);
+    this.r(g, 33, 10, 3, 7, colors.fire1);
+    g.generateTexture(PlaceholderAssets.bonfire, 40, 40);
     g.destroy();
   }
 
@@ -559,32 +526,30 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 5, 14, 13, 45, colors.ink);
-    this.r(g, 43, 14, 13, 45, colors.ink);
-    this.r(g, 5, 10, 51, 12, colors.ink);
-    this.r(g, 20, 2, 22, 14, colors.ink);
-    this.r(g, 8, 16, 9, 41, colors.stoneDark);
-    this.r(g, 44, 16, 9, 41, colors.stoneDark);
-    this.r(g, 8, 12, 45, 8, colors.stone);
-    this.r(g, 11, 17, 6, 12, colors.stone);
-    this.r(g, 46, 17, 6, 12, colors.stone);
-    this.r(g, 12, 11, 15, 3, colors.moss);
-    this.r(g, 38, 11, 13, 3, colors.moss);
-    this.r(g, 11, 25, 3, 11, colors.mossDark);
-    this.r(g, 27, 3, 8, 12, colors.goldLight);
-    this.r(g, 30, 6, 3, 5, colors.fireOrange);
-    this.r(g, 22, 20, 20, 38, colors.leatherDark);
-    this.r(g, 24, 22, 16, 34, colors.leather);
-    this.r(g, 31, 24, 2, 30, colors.ink);
-    this.r(g, 36, 39, 3, 4, colors.goldLight);
-    g.generateTexture(PlaceholderAssets.finishGate, 62, 62);
+    this.r(g, 4, 15, 11, 45, colors.ink);
+    this.r(g, 41, 15, 11, 45, colors.ink);
+    this.r(g, 4, 11, 48, 11, colors.ink);
+    this.r(g, 18, 4, 20, 12, colors.ink);
+    this.r(g, 6, 17, 8, 41, colors.stone0);
+    this.r(g, 42, 17, 8, 41, colors.stone0);
+    this.r(g, 7, 13, 42, 7, colors.stone1);
+    this.r(g, 10, 12, 12, 3, colors.moss1);
+    this.r(g, 35, 12, 11, 3, colors.moss1);
+    this.r(g, 24, 5, 7, 10, colors.gold2);
+    this.r(g, 26, 8, 2, 4, colors.fire1);
+    this.r(g, 20, 22, 16, 36, colors.leather0);
+    this.r(g, 22, 24, 12, 32, colors.leather1);
+    this.r(g, 27, 25, 2, 29, colors.ink);
+    this.r(g, 32, 41, 3, 4, colors.gold2);
+    this.r(g, 8, 28, 3, 10, colors.moss0);
+    g.generateTexture(PlaceholderAssets.finishGate, 56, 64);
     g.destroy();
   }
 
   private createUiTextures() {
     this.createPanelTexture();
-    this.createButtonTexture(PlaceholderAssets.uiButtonStone, 'stone');
-    this.createButtonTexture(PlaceholderAssets.uiButtonWood, 'wood');
+    this.createButtonTexture(PlaceholderAssets.uiButtonStone);
+    this.createButtonTexture(PlaceholderAssets.uiButtonWood);
     this.createIconButtonTexture();
     this.createHeartTexture(PlaceholderAssets.heartFull, true);
     this.createHeartTexture(PlaceholderAssets.heartEmpty, false);
@@ -598,54 +563,43 @@ export class AssetLoader {
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
     this.r(g, 0, 0, 180, 128, colors.ink);
-    this.r(g, 5, 5, 170, 118, colors.stoneDark);
-    this.r(g, 10, 10, 160, 108, 0x77b95a);
-    this.r(g, 10, 10, 160, 108, 0x8ed765, 0.55);
-    for (let x = 12; x < 168; x += 8) {
-      for (let y = 13; y < 116; y += 8) {
-        this.r(g, x, y, 2, 2, colors.mossDark, 0.5);
+    this.r(g, 5, 5, 170, 118, colors.stone0);
+    this.r(g, 10, 10, 160, 108, 0x82c969);
+    for (let x = 13; x < 168; x += 8) {
+      for (let y = 14; y < 116; y += 8) {
+        this.r(g, x, y, 2, 2, colors.moss0, 0.5);
       }
     }
     for (let x = 2; x < 176; x += 18) {
-      this.r(g, x, 0, 14, 7, colors.stoneLight);
-      this.r(g, x + 2, 121, 14, 7, colors.stoneLight);
-      this.r(g, x + 5, 6, 10, 4, colors.stoneDark);
+      this.r(g, x, 0, 14, 7, colors.stone3);
+      this.r(g, x + 2, 121, 14, 7, colors.stone3);
+      this.r(g, x + 5, 6, 10, 4, colors.stone0);
     }
     for (let y = 10; y < 116; y += 20) {
-      this.r(g, 0, y, 8, 15, colors.stoneLight);
-      this.r(g, 172, y + 4, 8, 15, colors.stoneLight);
-      this.r(g, 3, y + 4, 4, 10, colors.stoneDark);
+      this.r(g, 0, y, 8, 15, colors.stone3);
+      this.r(g, 172, y + 4, 8, 15, colors.stone3);
     }
-    this.r(g, 18, 5, 4, 12, colors.mossDark);
-    this.r(g, 152, 5, 4, 16, colors.mossDark);
+    this.r(g, 18, 5, 4, 13, colors.moss0);
+    this.r(g, 152, 5, 4, 17, colors.moss0);
     g.generateTexture(PlaceholderAssets.uiPanel, 180, 128);
     g.destroy();
   }
 
-  private createButtonTexture(key: string, type: 'stone' | 'wood') {
+  private createButtonTexture(key: string) {
     if (this.scene.textures.exists(key)) {
       return;
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    const w = type === 'stone' ? 154 : 146;
-    const h = type === 'stone' ? 36 : 30;
-    const dark = type === 'stone' ? colors.uiBlueDark : colors.uiWoodDark;
-    const mid = type === 'stone' ? colors.uiBlue : colors.uiWood;
-    const hi = type === 'stone' ? colors.uiBlueHi : colors.uiWoodHi;
-    this.r(g, 4, 0, w - 8, 3, colors.ink);
-    this.r(g, 1, 3, w - 2, h - 7, colors.ink);
-    this.r(g, 4, h - 4, w - 8, 4, colors.ink);
-    this.r(g, 5, 4, w - 10, h - 10, mid);
-    this.r(g, 7, 5, w - 14, 6, hi);
-    this.r(g, 7, h - 11, w - 14, 5, dark);
-    this.r(g, 12, 12, 28, 2, hi, 0.55);
-    this.r(g, w - 38, 10, 23, 2, dark, 0.55);
-    if (type === 'wood') {
-      this.r(g, 12, 9, w - 24, 2, colors.uiWoodDark, 0.45);
-      this.r(g, 18, 19, w - 40, 2, colors.uiWoodDark, 0.35);
-    }
-    g.generateTexture(key, w, h);
+    this.r(g, 4, 0, 146, 3, colors.ink);
+    this.r(g, 1, 3, 152, 29, colors.ink);
+    this.r(g, 4, 32, 146, 4, colors.ink);
+    this.r(g, 5, 4, 144, 25, colors.uiBlue1);
+    this.r(g, 7, 5, 140, 6, colors.uiBlue2);
+    this.r(g, 7, 25, 140, 5, colors.uiBlue0);
+    this.r(g, 12, 13, 28, 2, colors.uiBlue2, 0.6);
+    this.r(g, 112, 12, 23, 2, colors.uiBlue0, 0.55);
+    g.generateTexture(key, 154, 36);
     g.destroy();
   }
 
@@ -657,9 +611,9 @@ export class AssetLoader {
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
     this.r(g, 3, 0, 34, 3, colors.ink);
     this.r(g, 0, 3, 40, 32, colors.ink);
-    this.r(g, 4, 4, 32, 27, colors.uiBlue);
-    this.r(g, 6, 5, 28, 6, colors.uiBlueHi);
-    this.r(g, 6, 27, 28, 4, colors.uiBlueDark);
+    this.r(g, 4, 4, 32, 27, colors.uiBlue1);
+    this.r(g, 6, 5, 28, 6, colors.uiBlue2);
+    this.r(g, 6, 27, 28, 4, colors.uiBlue0);
     g.generateTexture(PlaceholderAssets.uiIconButton, 40, 36);
     g.destroy();
   }
@@ -670,8 +624,8 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    const a = full ? colors.fireRed : colors.uiBlueDark;
-    const b = full ? colors.scarfDeep : colors.stoneDark;
+    const a = full ? colors.fire0 : colors.uiBlue0;
+    const b = full ? colors.red0 : colors.stone0;
     this.r(g, 2, 2, 4, 3, colors.ink);
     this.r(g, 9, 2, 4, 3, colors.ink);
     this.r(g, 1, 5, 13, 5, colors.ink);
@@ -683,7 +637,7 @@ export class AssetLoader {
     this.r(g, 4, 10, 7, 2, b);
     this.r(g, 6, 12, 3, 1, b);
     if (full) {
-      this.r(g, 4, 4, 2, 1, colors.fireWhite);
+      this.r(g, 4, 4, 2, 1, colors.fire3);
     }
     g.generateTexture(key, 16, 16);
     g.destroy();
@@ -695,10 +649,10 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 0, 0, 72, 4, colors.goldLight);
-    this.r(g, 0, 0, 4, 72, colors.goldLight);
-    this.r(g, 68, 0, 4, 72, colors.goldDark);
-    this.r(g, 0, 68, 72, 4, colors.goldDark);
+    this.r(g, 0, 0, 72, 4, colors.gold2);
+    this.r(g, 0, 0, 4, 72, colors.gold2);
+    this.r(g, 68, 0, 4, 72, colors.gold0);
+    this.r(g, 0, 68, 72, 4, colors.gold0);
     this.r(g, 4, 4, 64, 3, colors.ink);
     this.r(g, 4, 65, 64, 3, colors.ink);
     g.generateTexture(PlaceholderAssets.selectionFrame, 72, 72);
@@ -721,11 +675,10 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 2, 14, 52, 4, colors.fireWhite, 0.9);
-    this.r(g, 12, 9, 43, 4, colors.fireYellow, 0.8);
-    this.r(g, 20, 20, 32, 3, colors.fireOrange, 0.65);
-    this.r(g, 40, 5, 18, 2, colors.fireWhite, 0.75);
-    g.generateTexture(PlaceholderAssets.slash, 62, 30);
+    this.r(g, 2, 11, 34, 3, colors.fire3, 0.9);
+    this.r(g, 9, 7, 29, 3, colors.fire2, 0.8);
+    this.r(g, 16, 15, 22, 2, colors.fire1, 0.65);
+    g.generateTexture(PlaceholderAssets.slash, 42, 22);
     g.destroy();
   }
 
@@ -735,11 +688,11 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 2, 12, 6, 3, 0xc2b8a3, 0.85);
-    this.r(g, 12, 9, 9, 5, 0xe1d6bd, 0.75);
-    this.r(g, 25, 11, 5, 3, 0xc2b8a3, 0.8);
-    this.r(g, 7, 16, 20, 2, 0x8b7e6c, 0.75);
-    g.generateTexture(PlaceholderAssets.dust, 36, 22);
+    this.r(g, 2, 9, 5, 3, 0xc2b8a3, 0.85);
+    this.r(g, 10, 7, 7, 4, 0xe1d6bd, 0.75);
+    this.r(g, 20, 9, 4, 3, 0xc2b8a3, 0.8);
+    this.r(g, 6, 12, 14, 2, 0x8b7e6c, 0.75);
+    g.generateTexture(PlaceholderAssets.dust, 28, 18);
     g.destroy();
   }
 
@@ -749,12 +702,11 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 15, 2, 4, 10, colors.fireYellow, 0.9);
-    this.r(g, 4, 15, 10, 4, colors.fireYellow, 0.85);
-    this.r(g, 23, 15, 10, 4, colors.fireOrange, 0.85);
-    this.r(g, 10, 10, 4, 4, colors.fireWhite, 0.75);
-    this.r(g, 24, 9, 4, 4, colors.fireOrange, 0.75);
-    g.generateTexture(PlaceholderAssets.jumpBurst, 38, 28);
+    this.r(g, 12, 2, 3, 8, colors.fire2, 0.9);
+    this.r(g, 4, 12, 8, 3, colors.fire2, 0.85);
+    this.r(g, 19, 12, 8, 3, colors.fire1, 0.85);
+    this.r(g, 8, 8, 3, 3, colors.fire3, 0.75);
+    g.generateTexture(PlaceholderAssets.jumpBurst, 30, 22);
     g.destroy();
   }
 
@@ -764,15 +716,13 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 14, 1, 3, 7, colors.goldLight);
-    this.r(g, 14, 24, 3, 7, colors.goldLight);
-    this.r(g, 1, 14, 7, 3, colors.goldLight);
-    this.r(g, 24, 14, 7, 3, colors.goldLight);
-    this.r(g, 7, 7, 3, 3, colors.fireWhite);
-    this.r(g, 22, 7, 3, 3, colors.fireWhite);
-    this.r(g, 7, 22, 3, 3, colors.fireYellow);
-    this.r(g, 22, 22, 3, 3, colors.fireYellow);
-    g.generateTexture(PlaceholderAssets.coinPickup, 32, 32);
+    this.r(g, 11, 1, 2, 5, colors.gold2);
+    this.r(g, 11, 18, 2, 5, colors.gold2);
+    this.r(g, 1, 11, 5, 2, colors.gold2);
+    this.r(g, 18, 11, 5, 2, colors.gold2);
+    this.r(g, 5, 5, 2, 2, colors.fire3);
+    this.r(g, 17, 17, 2, 2, colors.fire2);
+    g.generateTexture(PlaceholderAssets.coinPickup, 24, 24);
     g.destroy();
   }
 
@@ -782,11 +732,11 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 12, 2, 4, 10, 0xfff1f2, 0.85);
-    this.r(g, 6, 10, 17, 4, 0xfff1f2, 0.85);
-    this.r(g, 2, 4, 5, 5, 0xef2626, 0.85);
-    this.r(g, 24, 16, 5, 5, 0xef2626, 0.85);
-    g.generateTexture(PlaceholderAssets.damage, 32, 28);
+    this.r(g, 10, 2, 3, 8, 0xfff1f2, 0.85);
+    this.r(g, 5, 8, 13, 3, 0xfff1f2, 0.85);
+    this.r(g, 2, 3, 4, 4, 0xef2626, 0.85);
+    this.r(g, 18, 13, 4, 4, 0xef2626, 0.85);
+    g.generateTexture(PlaceholderAssets.damage, 24, 22);
     g.destroy();
   }
 
@@ -796,15 +746,13 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 19, 0, 4, 12, colors.fireYellow, 0.9);
-    this.r(g, 19, 31, 4, 12, colors.fireYellow, 0.9);
-    this.r(g, 0, 19, 12, 4, colors.fireYellow, 0.9);
-    this.r(g, 31, 19, 12, 4, colors.fireYellow, 0.9);
-    this.r(g, 8, 8, 5, 5, colors.fireOrange, 0.75);
-    this.r(g, 30, 8, 5, 5, colors.fireOrange, 0.75);
-    this.r(g, 8, 30, 5, 5, colors.fireOrange, 0.75);
-    this.r(g, 30, 30, 5, 5, colors.fireOrange, 0.75);
-    g.generateTexture(PlaceholderAssets.checkpointBurst, 44, 44);
+    this.r(g, 15, 0, 3, 9, colors.fire2, 0.9);
+    this.r(g, 15, 25, 3, 9, colors.fire2, 0.9);
+    this.r(g, 0, 15, 9, 3, colors.fire2, 0.9);
+    this.r(g, 25, 15, 9, 3, colors.fire2, 0.9);
+    this.r(g, 7, 7, 4, 4, colors.fire1, 0.75);
+    this.r(g, 23, 23, 4, 4, colors.fire1, 0.75);
+    g.generateTexture(PlaceholderAssets.checkpointBurst, 34, 34);
     g.destroy();
   }
 
@@ -814,13 +762,12 @@ export class AssetLoader {
     }
 
     const g = this.scene.make.graphics({ x: 0, y: 0 }, false);
-    this.r(g, 3, 15, 11, 4, colors.scarfDeep, 0.9);
-    this.r(g, 25, 8, 7, 7, colors.armorLight, 0.8);
-    this.r(g, 15, 5, 5, 5, colors.goldLight, 0.9);
-    this.r(g, 23, 23, 7, 4, colors.armorBlue, 0.8);
-    this.r(g, 9, 4, 3, 3, colors.fireYellow, 0.9);
-    this.r(g, 32, 18, 3, 3, colors.fireRed, 0.9);
-    g.generateTexture(PlaceholderAssets.deathBurst, 40, 32);
+    this.r(g, 3, 12, 8, 3, colors.red0, 0.9);
+    this.r(g, 20, 7, 5, 5, colors.armor3, 0.8);
+    this.r(g, 12, 5, 4, 4, colors.gold2, 0.9);
+    this.r(g, 18, 17, 5, 3, colors.armor2, 0.8);
+    this.r(g, 8, 3, 2, 2, colors.fire2, 0.9);
+    g.generateTexture(PlaceholderAssets.deathBurst, 30, 24);
     g.destroy();
   }
 }

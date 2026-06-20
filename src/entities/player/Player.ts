@@ -51,7 +51,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(12, 20);
-    body.setOffset(26, 34);
+    body.setOffset(18, 27);
 
     this.attackHitbox = scene.add.zone(x, y - 12, 26, 18);
     scene.physics.add.existing(this.attackHitbox);

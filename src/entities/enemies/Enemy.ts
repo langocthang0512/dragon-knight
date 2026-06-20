@@ -38,7 +38,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(options.type === 'flying' ? 30 : options.type === 'heavy' ? 34 : 26, options.type === 'heavy' ? 18 : 14);
-    body.setOffset(options.type === 'flying' ? 22 : 18, options.type === 'flying' ? 20 : options.type === 'heavy' ? 26 : 20);
+    body.setOffset(options.type === 'flying' ? 12 : options.type === 'heavy' ? 20 : 10, options.type === 'flying' ? 14 : options.type === 'heavy' ? 26 : 16);
 
     if (options.type === 'flying') {
       body.setAllowGravity(false);

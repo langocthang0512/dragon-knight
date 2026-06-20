@@ -54,7 +54,7 @@ export class MainMenuScene extends Phaser.Scene {
       });
     });
 
-    addFooterHint(this, 'A6 visual rebuild v2');
+    addFooterHint(this, 'Approved Candidate A visuals');
 
     this.input.keyboard?.once('keydown-ENTER', options[0].action);
     this.input.keyboard?.once('keydown-S', options[1].action);
