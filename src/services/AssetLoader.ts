@@ -121,6 +121,16 @@ function approvedCharacterFramePath(variant: PlayerVariant, state: PlayerAnimati
   return `/assets/characters/final/${variant}-${state}-${frame}.png`;
 }
 
+const approvedEnvironmentAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
+  tile: '/assets/environment/final/ground-tile.png',
+  coin: '/assets/environment/final/coin.png',
+  coinHud: '/assets/environment/final/coin-hud.png',
+  bonfire: '/assets/environment/final/bonfire.png',
+  trap: '/assets/environment/final/spike-trap.png',
+  dragonEgg: '/assets/environment/final/dragon-egg.png',
+  finishGate: '/assets/environment/final/finish-gate.png',
+};
+
 export class AssetLoader {
   constructor(private readonly scene: Phaser.Scene) {}
 
@@ -138,6 +148,15 @@ export class AssetLoader {
 
     if (!this.scene.textures.exists(PlaceholderAssets.player)) {
       this.scene.load.image(PlaceholderAssets.player, approvedCharacterFramePath('male', 'idle', 0));
+    }
+  }
+
+  preloadEnvironmentAssets() {
+    for (const [assetName, path] of Object.entries(approvedEnvironmentAssets)) {
+      const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
+      if (!this.scene.textures.exists(key)) {
+        this.scene.load.image(key, path);
+      }
     }
   }
 

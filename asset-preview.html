@@ -28,6 +28,12 @@
           super('AssetPreviewScene');
         }
 
+        preload() {
+          const assetLoader = new AssetLoader(this);
+          assetLoader.preloadCharacterAssets();
+          assetLoader.preloadEnvironmentAssets();
+        }
+
         create() {
           new AssetLoader(this).createGeneratedTextures();
           this.cameras.main.setBackgroundColor('#071f25');
