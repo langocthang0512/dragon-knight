@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { PlaceholderAssets } from '../../services/AssetLoader';
+import { enemyAnimationKey, PlaceholderAssets } from '../../services/AssetLoader';
 
 export type EnemyType = 'small' | 'flying' | 'heavy';
 
@@ -43,6 +43,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (options.type === 'flying') {
       body.setAllowGravity(false);
     }
+
+    this.play(enemyAnimationKey(this.enemyType, 'move'));
   }
 
   preUpdate(time: number, delta: number) {
@@ -66,12 +68,18 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   takeDamage(amount: number) {
     this.health -= amount;
     this.setTint(0xfef08a);
+    this.play(enemyAnimationKey(this.enemyType, this.health <= 0 ? 'death' : 'hit'), true);
 
     if (this.health <= 0) {
       this.disableBody(true, true);
       return;
     }
 
-    this.scene.time.delayedCall(100, () => this.clearTint());
+    this.scene.time.delayedCall(100, () => {
+      this.clearTint();
+      if (this.active) {
+        this.play(enemyAnimationKey(this.enemyType, 'move'), true);
+      }
+    });
   }
 }

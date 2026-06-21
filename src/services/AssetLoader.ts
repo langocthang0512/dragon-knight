@@ -41,6 +41,11 @@ const playerStates: PlayerAnimationState[] = [
   'death',
 ];
 
+const enemyStates = ['idle', 'move', 'attack', 'hit', 'death'] as const;
+
+export type EnemyAnimationState = (typeof enemyStates)[number];
+export type EnemyVisualType = 'small' | 'flying' | 'heavy';
+
 const stateFrameCounts: Record<PlayerAnimationState, number> = {
   idle: 1,
   run: 11,
@@ -131,6 +136,25 @@ const approvedEnvironmentAssets: Partial<Record<keyof typeof PlaceholderAssets, 
   finishGate: '/assets/environment/final/finish-gate.png',
 };
 
+const approvedEnemyAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
+  enemy: '/assets/enemies/final/small-dragon.png',
+  dragonSmall: '/assets/enemies/final/small-dragon.png',
+  dragonFlying: '/assets/enemies/final/flying-dragon.png',
+  dragonHeavy: '/assets/enemies/final/heavy-dragon.png',
+};
+
+export function enemyAnimationKey(type: EnemyVisualType, state: EnemyAnimationState) {
+  return `enemy-${type}-${state}`;
+}
+
+function enemyTextureKey(type: EnemyVisualType) {
+  return type === 'flying'
+    ? PlaceholderAssets.dragonFlying
+    : type === 'heavy'
+      ? PlaceholderAssets.dragonHeavy
+      : PlaceholderAssets.dragonSmall;
+}
+
 export class AssetLoader {
   constructor(private readonly scene: Phaser.Scene) {}
 
@@ -160,6 +184,15 @@ export class AssetLoader {
     }
   }
 
+  preloadEnemyAssets() {
+    for (const [assetName, path] of Object.entries(approvedEnemyAssets)) {
+      const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
+      if (!this.scene.textures.exists(key)) {
+        this.scene.load.image(key, path);
+      }
+    }
+  }
+
   createGeneratedTextures() {
     this.createDragonTexture(PlaceholderAssets.enemy, 'small');
     this.createDragonTexture(PlaceholderAssets.dragonSmall, 'small');
@@ -175,6 +208,7 @@ export class AssetLoader {
     this.createUiTextures();
     this.createVfxTextures();
     this.createPlayerAnimations();
+    this.createEnemyAnimations();
   }
 
   private r(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, color: number, alpha = 1) {
@@ -208,6 +242,25 @@ export class AssetLoader {
           frames: Array.from({ length: stateFrameCounts[state] }, (_, frame) => ({ key: playerFrameKey(variant, state, frame) })),
           frameRate: state === 'run' ? 10 : state === 'attack' ? 16 : state === 'death' ? 4 : 6,
           repeat: state === 'idle' || state === 'run' ? -1 : 0,
+        });
+      }
+    }
+  }
+
+  private createEnemyAnimations() {
+    for (const type of ['small', 'flying', 'heavy'] as EnemyVisualType[]) {
+      for (const state of enemyStates) {
+        const key = enemyAnimationKey(type, state);
+
+        if (this.scene.anims.exists(key)) {
+          continue;
+        }
+
+        this.scene.anims.create({
+          key,
+          frames: [{ key: enemyTextureKey(type) }],
+          frameRate: state === 'attack' ? 8 : state === 'death' ? 4 : 6,
+          repeat: state === 'idle' || state === 'move' ? -1 : 0,
         });
       }
     }

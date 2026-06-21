@@ -13,6 +13,7 @@ export class PreloadScene extends Phaser.Scene {
     const assetLoader = new AssetLoader(this);
     assetLoader.preloadCharacterAssets();
     assetLoader.preloadEnvironmentAssets();
+    assetLoader.preloadEnemyAssets();
   }
 
   create() {
