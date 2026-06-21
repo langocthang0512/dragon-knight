@@ -43,7 +43,7 @@ const playerStates: PlayerAnimationState[] = [
 
 const stateFrameCounts: Record<PlayerAnimationState, number> = {
   idle: 1,
-  run: 3,
+  run: 11,
   jump: 1,
   doubleJump: 1,
   fall: 1,
@@ -187,7 +187,7 @@ export class AssetLoader {
         this.scene.anims.create({
           key,
           frames: Array.from({ length: stateFrameCounts[state] }, (_, frame) => ({ key: playerFrameKey(variant, state, frame) })),
-          frameRate: state === 'run' ? 12 : state === 'attack' ? 16 : state === 'death' ? 4 : 6,
+          frameRate: state === 'run' ? 10 : state === 'attack' ? 16 : state === 'death' ? 4 : 6,
           repeat: state === 'idle' || state === 'run' ? -1 : 0,
         });
       }
