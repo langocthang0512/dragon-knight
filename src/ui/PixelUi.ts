@@ -7,9 +7,29 @@ const textStyle = {
   align: 'center',
 } as const;
 
+function animateIn(scene: Phaser.Scene, targets: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], delay = 0) {
+  const items = Array.isArray(targets) ? targets : [targets];
+  items.forEach((item) => {
+    const alphaTarget = item as unknown as Phaser.GameObjects.Components.Alpha;
+    alphaTarget.setAlpha?.(0);
+  });
+
+  scene.tweens.add({
+    targets: items,
+    alpha: 1,
+    scaleX: '+=0.015',
+    scaleY: '+=0.015',
+    duration: 160,
+    delay,
+    ease: 'Quad.easeOut',
+  });
+}
+
 export function addMenuBackdrop(scene: Phaser.Scene) {
   scene.cameras.main.setBackgroundColor('#0b2d32');
-  scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, PlaceholderAssets.uiPanel).setDisplaySize(430, 232).setDepth(0);
+  const panel = scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, PlaceholderAssets.uiPanel).setDisplaySize(430, 232).setDepth(0);
+  animateIn(scene, panel);
+  return panel;
 }
 
 export function addScreenTitle(scene: Phaser.Scene, text: string, y = 36) {
@@ -35,6 +55,9 @@ export function addPixelButton(
   const texture = options.tone === 'wood' ? PlaceholderAssets.uiButtonWood : PlaceholderAssets.uiButtonStone;
   const width = options.width ?? (options.tone === 'wood' ? 150 : 164);
   const button = scene.add.image(x, y, texture).setDisplaySize(width, options.tone === 'wood' ? 32 : 38).setDepth(10);
+  if (options.selected) {
+    button.setTint(0xfff2b8);
+  }
   const caption = options.hotkey ? `${options.hotkey}  ${label}` : label;
   const text = scene.add
     .text(x, y - 1, caption.toUpperCase(), {
@@ -46,6 +69,8 @@ export function addPixelButton(
     })
     .setOrigin(0.5)
     .setDepth(11);
+
+  animateIn(scene, [button, text], 30);
 
   return { button, text };
 }
@@ -64,5 +89,7 @@ export function addFooterHint(scene: Phaser.Scene, text: string) {
 }
 
 export function addPanel(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
-  return scene.add.image(x, y, PlaceholderAssets.uiPanel).setDisplaySize(width, height).setDepth(5);
+  const panel = scene.add.image(x, y, PlaceholderAssets.uiPanel).setDisplaySize(width, height).setDepth(5);
+  animateIn(scene, panel, 20);
+  return panel;
 }

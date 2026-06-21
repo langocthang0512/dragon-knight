@@ -143,6 +143,13 @@ const approvedEnemyAssets: Partial<Record<keyof typeof PlaceholderAssets, string
   dragonHeavy: '/assets/enemies/final/heavy-dragon.png',
 };
 
+const approvedUiAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
+  uiPanel: '/assets/ui/final/stone-menu-panel.png',
+  uiButtonStone: '/assets/ui/final/stone-button.png',
+  uiButtonWood: '/assets/ui/final/wood-button.png',
+  uiIconButton: '/assets/ui/final/icon-button.png',
+};
+
 export function enemyAnimationKey(type: EnemyVisualType, state: EnemyAnimationState) {
   return `enemy-${type}-${state}`;
 }
@@ -186,6 +193,15 @@ export class AssetLoader {
 
   preloadEnemyAssets() {
     for (const [assetName, path] of Object.entries(approvedEnemyAssets)) {
+      const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
+      if (!this.scene.textures.exists(key)) {
+        this.scene.load.image(key, path);
+      }
+    }
+  }
+
+  preloadUiAssets() {
+    for (const [assetName, path] of Object.entries(approvedUiAssets)) {
       const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
       if (!this.scene.textures.exists(key)) {
         this.scene.load.image(key, path);
