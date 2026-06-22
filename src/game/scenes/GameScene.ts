@@ -239,12 +239,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private spawnOneShot(key: string, x: number, y: number, scale: number, durationMs: number) {
-    const sprite = this.add.image(x, y, key).setScale(scale).setDepth(35);
+    const sprite = this.add.image(x, y, key).setScale(scale * 0.86).setDepth(35);
     this.tweens.add({
       targets: sprite,
       y: y - 8,
+      scale,
       alpha: 0,
       duration: durationMs,
+      ease: 'Quad.easeOut',
       onComplete: () => sprite.destroy(),
     });
   }

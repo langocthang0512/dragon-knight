@@ -15,6 +15,7 @@ export class PreloadScene extends Phaser.Scene {
     assetLoader.preloadEnvironmentAssets();
     assetLoader.preloadEnemyAssets();
     assetLoader.preloadUiAssets();
+    assetLoader.preloadVfxAssets();
   }
 
   create() {

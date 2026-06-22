@@ -150,6 +150,16 @@ const approvedUiAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> 
   uiIconButton: '/assets/ui/final/icon-button.png',
 };
 
+const approvedVfxAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
+  slash: '/assets/vfx/final/slash.png',
+  dust: '/assets/vfx/final/dust.png',
+  jumpBurst: '/assets/vfx/final/jump-burst.png',
+  coinPickup: '/assets/vfx/final/coin-pickup.png',
+  damage: '/assets/vfx/final/damage.png',
+  checkpointBurst: '/assets/vfx/final/checkpoint-burst.png',
+  deathBurst: '/assets/vfx/final/death-burst.png',
+};
+
 export function enemyAnimationKey(type: EnemyVisualType, state: EnemyAnimationState) {
   return `enemy-${type}-${state}`;
 }
@@ -202,6 +212,15 @@ export class AssetLoader {
 
   preloadUiAssets() {
     for (const [assetName, path] of Object.entries(approvedUiAssets)) {
+      const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
+      if (!this.scene.textures.exists(key)) {
+        this.scene.load.image(key, path);
+      }
+    }
+  }
+
+  preloadVfxAssets() {
+    for (const [assetName, path] of Object.entries(approvedVfxAssets)) {
       const key = PlaceholderAssets[assetName as keyof typeof PlaceholderAssets];
       if (!this.scene.textures.exists(key)) {
         this.scene.load.image(key, path);
