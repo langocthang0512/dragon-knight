@@ -16,7 +16,7 @@ export type LevelDefinition = {
     patrolSpeed?: number;
   }>;
   traps: Array<{ x: number; y: number; width: number; height: number }>;
-  fallingEggs: Array<{ x: number; y: number; delayMs: number; intervalMs: number }>;
+  fallingEggs: Array<{ x: number; y: number; delayMs: number; intervalMs: number; fallSpeed?: number }>;
   tutorialMarkers: Array<{ x: number; y: number; text: string }>;
 };
 
@@ -86,19 +86,14 @@ export const levelOne: LevelDefinition = {
     { x: 3500, y: 234, width: 58, height: 12 },
   ],
   fallingEggs: [
-    { x: 2380, y: 20, delayMs: 500, intervalMs: 2100 },
-    { x: 2840, y: 20, delayMs: 1200, intervalMs: 2400 },
-    { x: 3035, y: 20, delayMs: 300, intervalMs: 1900 },
-    { x: 3615, y: 20, delayMs: 900, intervalMs: 1700 },
+    { x: 2448, y: 20, delayMs: 520, intervalMs: 1320, fallSpeed: 330 },
+    { x: 2878, y: 20, delayMs: 660, intervalMs: 1500, fallSpeed: 345 },
+    { x: 3076, y: 20, delayMs: 430, intervalMs: 1250, fallSpeed: 335 },
+    { x: 3648, y: 20, delayMs: 780, intervalMs: 1580, fallSpeed: 350 },
   ],
   tutorialMarkers: [
     { x: 84, y: 162, text: 'Move: A/D or arrows' },
-    { x: 250, y: 152, text: 'Jump and double jump' },
-    { x: 720, y: 166, text: 'Collect coins' },
+    { x: 250, y: 152, text: 'Double Jump' },
     { x: 1180, y: 178, text: 'Attack: J' },
-    { x: 1660, y: 178, text: 'Bonfire checkpoint' },
-    { x: 1960, y: 178, text: 'Spikes hurt' },
-    { x: 2350, y: 150, text: 'Dragon eggs fall' },
-    { x: 4000, y: 150, text: 'Finish' },
   ],
 };

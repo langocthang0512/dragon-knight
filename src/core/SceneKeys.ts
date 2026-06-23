@@ -7,7 +7,6 @@ export const SceneKeys = {
   Settings: 'SettingsScene',
   Game: 'GameScene',
   Pause: 'PauseScene',
-  GameOver: 'GameOverScene',
   Result: 'ResultScene',
 } as const;
 

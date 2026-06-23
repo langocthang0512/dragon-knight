@@ -3,7 +3,6 @@ import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../config/gameSettings';
 import { responsiveScaleConfig } from '../core/ResponsiveScaling';
 import { BootScene } from './scenes/BootScene';
 import { CharacterSelectScene } from './scenes/CharacterSelectScene';
-import { GameOverScene } from './scenes/GameOverScene';
 import { GameScene } from './scenes/GameScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
 import { PauseScene } from './scenes/PauseScene';
@@ -38,7 +37,6 @@ export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameCon
       SettingsScene,
       GameScene,
       PauseScene,
-      GameOverScene,
       ResultScene,
     ],
   };

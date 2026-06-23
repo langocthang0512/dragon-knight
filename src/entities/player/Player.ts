@@ -34,13 +34,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private respawning = false;
   private dead = false;
   private lastJumpWasDouble = false;
+  private wasGrounded = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number, options: PlayerOptions) {
     super(scene, x, y, `${playerAnimationKey(options.variant, 'idle')}-0`);
 
     this.variant = options.variant;
     this.maxHealth = Math.min(options.maxHealth ?? gameSettings.defaultHealth, gameSettings.maxHealth);
-    this.health = this.maxHealth;
+    this.health = Math.min(gameSettings.defaultHealth, this.maxHealth);
     this.checkpoint = new Phaser.Math.Vector2(x, y);
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -113,7 +114,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.events.emit(PlayerEvents.CheckpointChanged, { x, y });
   }
 
-  takeDamage(amount: number, source: PlayerDamageSource) {
+  takeDamage(amount: number, _source: PlayerDamageSource) {
     const now = this.scene.time.now;
 
     if (this.dead || this.respawning || now < this.invulnerableUntil) {
@@ -131,13 +132,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       return true;
     }
 
-    if (source === 'trap') {
-      this.scene.time.delayedCall(140, () => this.respawnAtCheckpoint(false));
-    } else {
-      const knockback = this.flipX ? 120 : -120;
-      this.setVelocity(knockback, -120);
-      this.scene.time.delayedCall(180, () => this.clearTint());
-    }
+    this.scene.time.delayedCall(140, () => this.respawnAtCheckpoint(false));
 
     return true;
   }
@@ -150,18 +145,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private updateGrounding(now: number, body: Phaser.Physics.Arcade.Body) {
-    if (body.blocked.down || body.touching.down) {
+    const grounded = this.isGrounded(body);
+
+    if (grounded) {
       this.lastGroundedAt = now;
-      this.jumpsUsed = 0;
+      if (!this.wasGrounded) {
+        this.jumpsUsed = 0;
+        this.lastJumpWasDouble = false;
+      }
     } else if (now - this.lastGroundedAt > gameSettings.coyoteTimeMs && this.jumpsUsed === 0) {
       this.jumpsUsed = 1;
     }
+
+    this.wasGrounded = grounded;
   }
 
   private tryBufferedJump(now: number) {
     const jumpBuffered = now - this.lastJumpPressedAt <= gameSettings.jumpBufferMs;
     const body = this.body as Phaser.Physics.Arcade.Body;
-    const grounded = body.blocked.down || body.touching.down;
+    const grounded = this.isGrounded(body);
     const canCoyoteJump = now - this.lastGroundedAt <= gameSettings.coyoteTimeMs && this.jumpsUsed === 0;
     const canDoubleJump = !grounded && !canCoyoteJump && this.jumpsUsed < this.maxJumps;
 
@@ -173,6 +175,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.lastJumpWasDouble = canDoubleJump;
     this.jumpsUsed = grounded || canCoyoteJump ? 1 : this.jumpsUsed + 1;
     this.lastJumpPressedAt = -Infinity;
+    this.wasGrounded = false;
+  }
+
+  private isGrounded(body: Phaser.Physics.Arcade.Body) {
+    return (body.blocked.down || body.touching.down) && body.velocity.y >= -1;
   }
 
   private startAttack(now: number) {
@@ -270,6 +277,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.jumpsUsed = 0;
     this.lastJumpWasDouble = false;
     this.lastJumpPressedAt = -Infinity;
+    this.wasGrounded = false;
 
     if (restoreHealth) {
       this.health = gameSettings.defaultHealth;

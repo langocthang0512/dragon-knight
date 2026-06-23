@@ -23,7 +23,10 @@ export class GameScene extends Phaser.Scene {
   private lastHealth = 0;
   private levelStartedAt = 0;
   private levelComplete = false;
-  private readonly eggSpawns = new Map<Phaser.Physics.Arcade.Image, { x: number; y: number }>();
+  private readonly eggSpawns = new Map<
+    Phaser.Physics.Arcade.Image,
+    { x: number; y: number; delayMs: number; intervalMs: number; fallSpeed: number }
+  >();
 
   constructor() {
     super(SceneKeys.Game);
@@ -142,16 +145,17 @@ export class GameScene extends Phaser.Scene {
       egg.setOrigin(0.5);
       body.setAllowGravity(true);
       body.enable = false;
-      this.eggSpawns.set(egg, { x: eggSpawn.x, y: eggSpawn.y });
-
-      const dropEgg = () => this.dropEgg(egg);
-      this.time.delayedCall(eggSpawn.delayMs, () => {
-        dropEgg();
-        this.time.addEvent({ delay: eggSpawn.intervalMs, callback: dropEgg, loop: true });
+      this.eggSpawns.set(egg, {
+        x: eggSpawn.x,
+        y: eggSpawn.y,
+        delayMs: eggSpawn.delayMs,
+        intervalMs: eggSpawn.intervalMs,
+        fallSpeed: eggSpawn.fallSpeed ?? 330,
       });
+      this.scheduleEggDrop(egg);
     }
     this.physics.add.overlap(this.player, eggs, (_player, target) => {
-      this.player?.takeDamage(1, 'enemy');
+      this.player?.takeDamage(1, 'trap');
       this.resetEgg(target as Phaser.Physics.Arcade.Image);
     });
     this.physics.add.collider(eggs, platforms, (eggObject) => {
@@ -181,9 +185,6 @@ export class GameScene extends Phaser.Scene {
         this.spawnOneShot(health <= 0 ? PlaceholderAssets.deathBurst : PlaceholderAssets.damage, this.player.x, this.player.y - 24, 1.35, 260);
       }
       this.lastHealth = health;
-      if (health <= 0 && !this.levelComplete) {
-        this.sceneManager?.start(SceneKeys.GameOver);
-      }
     });
 
     this.events.on(PlayerEvents.Respawned, ({ x, y }: { x: number; y: number }) => {
@@ -212,6 +213,16 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  private scheduleEggDrop(egg: Phaser.Physics.Arcade.Image) {
+    const spawn = this.eggSpawns.get(egg);
+    if (!spawn) {
+      return;
+    }
+
+    const delay = Phaser.Math.Between(spawn.delayMs, spawn.intervalMs);
+    this.time.delayedCall(delay, () => this.dropEgg(egg));
+  }
+
   private dropEgg(egg: Phaser.Physics.Arcade.Image) {
     const spawn = this.eggSpawns.get(egg);
     if (!spawn) {
@@ -224,7 +235,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     egg.enableBody(true, spawn.x, spawn.y, true, true);
-    egg.setVelocityY(170);
+    egg.setVelocityY(spawn.fallSpeed);
   }
 
   private resetEgg(egg: Phaser.Physics.Arcade.Image) {
@@ -236,6 +247,7 @@ export class GameScene extends Phaser.Scene {
     egg.disableBody(true, true);
     egg.setPosition(spawn.x, spawn.y);
     egg.setVelocity(0, 0);
+    this.scheduleEggDrop(egg);
   }
 
   private spawnOneShot(key: string, x: number, y: number, scale: number, durationMs: number) {
