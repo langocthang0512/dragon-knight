@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { DebugSystem } from '../../core/DebugSystem';
 import { InputSystem } from '../../core/InputSystem';
 import { SceneKeys } from '../../core/SceneKeys';
 import { SceneManager } from '../../core/SceneManager';
@@ -16,7 +15,6 @@ export class GameScene extends Phaser.Scene {
   private inputSystem?: InputSystem;
   private player?: Player;
   private hud?: Hud;
-  private debug?: DebugSystem;
   private sceneManager?: SceneManager;
   private checkpointActivated = false;
   private coinsCollected = 0;
@@ -168,16 +166,11 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, finishZone, () => this.completeLevel());
     finishGate.setDepth(5);
 
-    this.hud = new Hud(this);
+    this.hud = new Hud(this, () => this.openPauseMenu());
     this.hud.create();
     this.hud.setCoins(this.coinsCollected);
     this.hud.setHealth(this.player.getHealthSnapshot().health, this.player.getHealthSnapshot().maxHealth);
     this.lastHealth = this.player.getHealthSnapshot().health;
-
-    if (save.settings.showDebug) {
-      this.debug = new DebugSystem(this);
-      this.debug.create('debug: Level 1 / tutorial');
-    }
 
     this.events.on(PlayerEvents.HealthChanged, ({ health, maxHealth }: PlayerHealthChangedEvent) => {
       this.hud?.setHealth(health, maxHealth);
@@ -201,16 +194,16 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (input.pause) {
-      this.scene.pause();
-      this.sceneManager?.launch(SceneKeys.Pause);
+      this.openPauseMenu();
       return;
     }
 
     this.player?.updateFromInput(input);
+  }
 
-    if (this.checkpointActivated) {
-      this.debug?.setText(`debug: Level 1 / checkpoint active / coins ${this.coinsCollected}`);
-    }
+  private openPauseMenu() {
+    this.scene.pause();
+    this.sceneManager?.launch(SceneKeys.Pause);
   }
 
   private scheduleEggDrop(egg: Phaser.Physics.Arcade.Image) {

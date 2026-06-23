@@ -92,8 +92,8 @@ export const levelOne: LevelDefinition = {
     { x: 3648, y: 20, delayMs: 780, intervalMs: 1580, fallSpeed: 350 },
   ],
   tutorialMarkers: [
-    { x: 84, y: 162, text: 'Move: A/D or arrows' },
+    { x: 84, y: 162, text: 'Move' },
     { x: 250, y: 152, text: 'Double Jump' },
-    { x: 1180, y: 178, text: 'Attack: J' },
+    { x: 1180, y: 178, text: 'Attack' },
   ],
 };

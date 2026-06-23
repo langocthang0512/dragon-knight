@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
-import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../../config/gameSettings';
+import { gameSettings, GAME_WIDTH } from '../../config/gameSettings';
 import { SceneKeys } from '../../core/SceneKeys';
 import { SceneManager } from '../../core/SceneManager';
 import { PlaceholderAssets } from '../../services/AssetLoader';
 import { SaveService } from '../../services/SaveService';
-import { addFooterHint, addMenuBackdrop, addPanel, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
+import { addMenuBackdrop, addPanel, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
 
 const HEART_COST = 10;
 
@@ -45,7 +45,7 @@ export class ShopScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    addPixelButton(this, GAME_WIDTH / 2, 168, `Buy Heart (${HEART_COST})`, { hotkey: 'B', tone: 'wood', width: 190 });
+    addPixelButton(this, GAME_WIDTH / 2, 168, `Buy Heart (${HEART_COST})`, { onSelect: () => this.buyHeart(), tone: 'wood', width: 190 });
 
     this.status = this.add
       .text(GAME_WIDTH / 2, 204, 'Max hearts is 5', {
@@ -57,7 +57,7 @@ export class ShopScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    addFooterHint(this, 'ESC menu');
+    addPixelButton(this, GAME_WIDTH / 2, 232, 'Back', { onSelect: () => sceneManager.start(SceneKeys.MainMenu), width: 150 });
 
     this.input.keyboard?.once('keydown-B', () => this.buyHeart());
     this.input.keyboard?.once('keydown-ESC', () => sceneManager.start(SceneKeys.MainMenu));

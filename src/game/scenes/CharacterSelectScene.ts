@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import { gameSettings, GAME_HEIGHT, GAME_WIDTH } from '../../config/gameSettings';
+import { GAME_WIDTH } from '../../config/gameSettings';
 import { characters } from '../../data/characters';
 import { SceneKeys } from '../../core/SceneKeys';
 import { SceneManager } from '../../core/SceneManager';
 import { PlayerVariant } from '../../entities/player/playerTypes';
 import { PlaceholderAssets, playerAnimationKey } from '../../services/AssetLoader';
 import { SaveService } from '../../services/SaveService';
-import { addFooterHint, addMenuBackdrop, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
+import { addMenuBackdrop, addPixelButton, addScreenTitle } from '../../ui/PixelUi';
 
 export class CharacterSelectScene extends Phaser.Scene {
   constructor() {
@@ -32,7 +32,13 @@ export class CharacterSelectScene extends Phaser.Scene {
         .setScale(0.95)
         .setDepth(15)
         .play(playerAnimationKey(character.id, 'idle'));
-      addPixelButton(this, x, 174, character.name, { hotkey: `${index + 1}`, selected, tone: selected ? 'wood' : 'stone' });
+      addPixelButton(this, x, 174, character.id === 'male' ? 'Male Knight' : 'Female Knight', {
+        onSelect: () => this.select(character.id),
+        selected,
+        tone: selected ? 'wood' : 'stone',
+        width: 150,
+        fontSize: '9px',
+      });
       this.add
         .text(x, 198, character.hair, {
           fontFamily: 'monospace',
@@ -44,7 +50,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         .setOrigin(0.5);
     });
 
-    addFooterHint(this, '1 male | 2 female | ESC menu');
+    addPixelButton(this, GAME_WIDTH / 2, 236, 'Back', { onSelect: () => sceneManager.start(SceneKeys.MainMenu), width: 150 });
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (event.key === '1') {

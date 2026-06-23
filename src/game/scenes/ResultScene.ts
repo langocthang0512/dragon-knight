@@ -51,7 +51,12 @@ export class ResultScene extends Phaser.Scene {
         strokeThickness: 3,
       })
       .setOrigin(0.5);
-    addPixelButton(this, centerX(), centerY() + 68, 'Menu   R Replay', { hotkey: 'ENTER', tone: 'wood', width: 205 });
+    addPixelButton(this, centerX() - 70, centerY() + 68, 'Menu', {
+      onSelect: () => sceneManager.start(SceneKeys.MainMenu),
+      tone: 'wood',
+      width: 120,
+    });
+    addPixelButton(this, centerX() + 70, centerY() + 68, 'Replay', { onSelect: () => sceneManager.start(SceneKeys.Game), width: 120 });
 
     this.input.keyboard?.once('keydown-ENTER', () => sceneManager.start(SceneKeys.MainMenu));
     this.input.keyboard?.once('keydown-R', () => sceneManager.start(SceneKeys.Game));

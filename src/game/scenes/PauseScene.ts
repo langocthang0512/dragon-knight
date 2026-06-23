@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { SceneKeys } from '../../core/SceneKeys';
-import { SceneManager } from '../../core/SceneManager';
 import { centerX, centerY } from '../../core/ResponsiveScaling';
 import { addPanel, addPixelButton } from '../../ui/PixelUi';
 
@@ -10,12 +9,25 @@ export class PauseScene extends Phaser.Scene {
   }
 
   create() {
-    const sceneManager = new SceneManager(this);
+    const resume = () => {
+      this.scene.resume(SceneKeys.Game);
+      this.scene.stop(SceneKeys.Pause);
+    };
+    const retry = () => {
+      this.scene.stop(SceneKeys.Game);
+      this.scene.stop(SceneKeys.Pause);
+      this.scene.start(SceneKeys.Game);
+    };
+    const mainMenu = () => {
+      this.scene.stop(SceneKeys.Game);
+      this.scene.stop(SceneKeys.Pause);
+      this.scene.start(SceneKeys.MainMenu);
+    };
 
     this.add.rectangle(centerX(), centerY(), 480, 270, 0x050509, 0.55);
-    addPanel(this, centerX(), centerY(), 260, 140);
+    addPanel(this, centerX(), centerY(), 260, 170);
     this.add
-      .text(centerX(), centerY() - 20, 'PAUSED', {
+      .text(centerX(), centerY() - 52, 'PAUSED', {
         fontFamily: 'monospace',
         fontSize: '20px',
         color: '#fff2b8',
@@ -23,21 +35,12 @@ export class PauseScene extends Phaser.Scene {
         strokeThickness: 4,
       })
       .setOrigin(0.5);
-    addPixelButton(this, centerX(), centerY() + 24, 'Resume   R Retry   M Menu', { hotkey: 'ESC', width: 224 });
+    addPixelButton(this, centerX(), centerY() - 12, 'Resume', { onSelect: resume, tone: 'wood', width: 170 });
+    addPixelButton(this, centerX(), centerY() + 25, 'Retry', { onSelect: retry, width: 170 });
+    addPixelButton(this, centerX(), centerY() + 62, 'Main Menu', { onSelect: mainMenu, width: 170 });
 
-    this.input.keyboard?.once('keydown-ESC', () => {
-      this.scene.resume(SceneKeys.Game);
-      sceneManager.stop(SceneKeys.Pause);
-    });
-
-    this.input.keyboard?.once('keydown-R', () => {
-      sceneManager.stop(SceneKeys.Pause);
-      sceneManager.start(SceneKeys.Game);
-    });
-
-    this.input.keyboard?.once('keydown-M', () => {
-      sceneManager.stop(SceneKeys.Game);
-      sceneManager.start(SceneKeys.MainMenu);
-    });
+    this.input.keyboard?.once('keydown-ESC', resume);
+    this.input.keyboard?.once('keydown-R', retry);
+    this.input.keyboard?.once('keydown-M', mainMenu);
   }
 }

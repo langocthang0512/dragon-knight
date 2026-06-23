@@ -27,7 +27,7 @@ function animateIn(scene: Phaser.Scene, targets: Phaser.GameObjects.GameObject |
 
 export function addMenuBackdrop(scene: Phaser.Scene) {
   scene.cameras.main.setBackgroundColor('#0b2d32');
-  const panel = scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, PlaceholderAssets.uiPanel).setDisplaySize(430, 232).setDepth(0);
+  const panel = scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, PlaceholderAssets.uiPanel).setDisplaySize(410, 224).setDepth(0);
   animateIn(scene, panel);
   return panel;
 }
@@ -50,29 +50,77 @@ export function addPixelButton(
   x: number,
   y: number,
   label: string,
-  options: { width?: number; tone?: 'stone' | 'wood'; hotkey?: string; selected?: boolean } = {},
+  options: {
+    width?: number;
+    height?: number;
+    tone?: 'stone' | 'wood';
+    selected?: boolean;
+    fontSize?: string;
+    onSelect?: () => void;
+  } = {},
 ) {
   const texture = options.tone === 'wood' ? PlaceholderAssets.uiButtonWood : PlaceholderAssets.uiButtonStone;
   const width = options.width ?? (options.tone === 'wood' ? 150 : 164);
-  const button = scene.add.image(x, y, texture).setDisplaySize(width, options.tone === 'wood' ? 32 : 38).setDepth(10);
+  const height = options.height ?? 34;
+  const button = scene.add.image(x, y, texture).setDisplaySize(width, height).setDepth(10);
+  const setSelectedTint = () => {
+    button.setTint(options.selected ? 0xfff2b8 : 0xffffff);
+  };
+  if (options.onSelect) {
+    button.setInteractive({ useHandCursor: true });
+    button.on('pointerover', () => button.setTint(0xfff2b8));
+    button.on('pointerout', setSelectedTint);
+    button.on('pointerdown', options.onSelect);
+  }
   if (options.selected) {
     button.setTint(0xfff2b8);
   }
-  const caption = options.hotkey ? `${options.hotkey}  ${label}` : label;
   const text = scene.add
-    .text(x, y - 1, caption.toUpperCase(), {
+    .text(x, y - 1, label.toUpperCase(), {
       ...textStyle,
-      fontSize: '11px',
+      fontSize: options.fontSize ?? '10px',
       color: options.selected ? '#fff2b8' : '#172033',
       stroke: options.selected ? '#050509' : '#c7d6de',
       strokeThickness: options.selected ? 3 : 1,
+      fixedWidth: width - 18,
     })
     .setOrigin(0.5)
     .setDepth(11);
+  if (options.onSelect) {
+    text.setInteractive({ useHandCursor: true });
+    text.on('pointerover', () => button.setTint(0xfff2b8));
+    text.on('pointerout', setSelectedTint);
+    text.on('pointerdown', options.onSelect);
+  }
 
   animateIn(scene, [button, text], 30);
 
   return { button, text };
+}
+
+export function addIconCell(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  texture: string,
+  options: { onSelect?: () => void; selected?: boolean; scale?: number } = {},
+) {
+  const button = scene.add.image(x, y, texture).setScale(options.scale ?? 1).setDepth(10);
+  const setSelectedTint = () => {
+    button.setTint(options.selected ? 0xfff2b8 : 0xffffff);
+  };
+  if (options.selected) {
+    button.setTint(0xfff2b8);
+  }
+  if (options.onSelect) {
+    button.setInteractive({ useHandCursor: true });
+    button.on('pointerover', () => button.setTint(0xfff2b8));
+    button.on('pointerout', setSelectedTint);
+    button.on('pointerdown', options.onSelect);
+  }
+
+  animateIn(scene, button, 30);
+  return button;
 }
 
 export function addFooterHint(scene: Phaser.Scene, text: string) {

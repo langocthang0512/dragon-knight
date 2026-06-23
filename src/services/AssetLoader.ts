@@ -25,6 +25,8 @@ export const PlaceholderAssets = {
   uiButtonStone: 'candidate-a-ui-button-stone',
   uiButtonWood: 'candidate-a-ui-button-wood',
   uiIconButton: 'candidate-a-ui-icon-button',
+  uiIconSettings: 'candidate-a-ui-icon-settings',
+  uiIconHome: 'candidate-a-ui-icon-home',
   heartFull: 'candidate-a-heart-full',
   heartEmpty: 'candidate-a-heart-empty',
   selectionFrame: 'candidate-a-selection-frame',
@@ -145,9 +147,11 @@ const approvedEnemyAssets: Partial<Record<keyof typeof PlaceholderAssets, string
 
 const approvedUiAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
   uiPanel: '/assets/ui/final/stone-menu-panel.png',
-  uiButtonStone: '/assets/ui/final/stone-button.png',
-  uiButtonWood: '/assets/ui/final/wood-button.png',
-  uiIconButton: '/assets/ui/final/icon-button.png',
+  uiButtonStone: '/assets/ui/final/stone-button-blank.png',
+  uiButtonWood: '/assets/ui/final/wood-button-blank.png',
+  uiIconButton: '/assets/ui/final/icon-play.png',
+  uiIconSettings: '/assets/ui/final/icon-settings.png',
+  uiIconHome: '/assets/ui/final/icon-home.png',
 };
 
 const approvedVfxAssets: Partial<Record<keyof typeof PlaceholderAssets, string>> = {
