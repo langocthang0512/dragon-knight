@@ -9,6 +9,7 @@ Phase A updated gameplay rules only. Approved character, environment, enemy, UI,
 - Fixed double-jump reset logic.
 - Jump count now resets only when the player transitions from air to grounded.
 - The ground check ignores stale ground contact while the player is moving upward, preventing repeated airborne jumps.
+- Animation state selection now uses the same grounded helper as jump logic, preventing jump/run flicker during takeoff and double-jump transitions.
 - Current allowed sequence is:
   - Jump
   - One double jump
@@ -61,9 +62,11 @@ Removed:
 - `src/game/config.ts`
 - `src/core/SceneKeys.ts`
 - `src/game/scenes/GameOverScene.ts`
+- `BUG_TRIAGE.md`
 
 ## Validation
 
 - `npm run build` passed.
 - Scan confirmed there are no remaining `GameOver`, `SceneKeys.GameOver`, or `GameOverScene` references in `src`.
 - Scan confirmed removed tutorial marker text no longer appears in level/game sources.
+- Screenshot delta inspected from `C:\Users\admin\Desktop\bug\character_bug_1.png` and `C:\Users\admin\Desktop\bug\character_bug_2.png`.

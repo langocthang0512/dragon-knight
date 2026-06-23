@@ -218,6 +218,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   private updateAnimationState(body: Phaser.Physics.Arcade.Body) {
     const now = this.scene.time.now;
+    const grounded = this.isGrounded(body);
 
     if (this.dead) {
       this.playState('death');
@@ -235,9 +236,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.clearTint();
 
-    if (!body.blocked.down && body.velocity.y < 0) {
+    if (!grounded && body.velocity.y < 0) {
       this.playState(this.lastJumpWasDouble ? 'doubleJump' : 'jump');
-    } else if (!body.blocked.down && body.velocity.y > 12) {
+    } else if (!grounded && body.velocity.y > 12) {
       this.lastJumpWasDouble = false;
       this.playState('fall');
     } else if (Math.abs(body.velocity.x) > 6) {
